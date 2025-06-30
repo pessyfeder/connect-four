@@ -1,2 +1,9 @@
 # connect-four
-CPU Code School session 2.13 - You Create a Game
+## Overview: 
+paste in spec game overview
+
+## The Game: 
+paste in from spec
+
+**The full spec for the game is in the repo**
+
