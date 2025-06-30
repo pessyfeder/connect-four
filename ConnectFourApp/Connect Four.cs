@@ -1,8 +1,8 @@
 namespace ConnectFourApp
 {
-    public partial class Form1 : Form
+    public partial class frmConnectFour : Form
     {
-        public Form1()
+        public frmConnectFour()
         {
             InitializeComponent();
         }
