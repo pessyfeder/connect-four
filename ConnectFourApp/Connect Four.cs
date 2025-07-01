@@ -117,6 +117,10 @@ namespace ConnectFourApp
                 new() { button22, button27, button32, button37 },
                 new() { button6, button11, button16, button21 },
                 new() { button11, button16, button21, button26 },
+                new() { button16, button21, button26, button31 },
+                new() { button5, button10, button15, button20 },
+                new() { button10, button15, button20, button25 },
+                new() { button4, button9, button14, button19 }
             };
 
 
