@@ -95,8 +95,8 @@ namespace ConnectFourApp
             {
                 new() { button3, button10, button17, button24 },
                 new() { button2, button9, button16, button23 },
-                new() { button9, button16, button23, button30 }, 
-                new() { button1, button8, button15, button22 }, 
+                new() { button9, button16, button23, button30 },
+                new() { button1, button8, button15, button22 },
                 new() { button8, button15, button22, button29 },
                 new() { button15, button22, button29, button36 },
                 new() { button7, button14, button21, button28 },
@@ -126,7 +126,7 @@ namespace ConnectFourApp
 
             btnStart.Click += BtnStart_Click;
         }
-        
+
         //Procedures
 
         private void StopGame()
@@ -142,7 +142,7 @@ namespace ConnectFourApp
         }
         private void StartGame()
         {
-            foreach(Control c in tblSlots.Controls)
+            foreach (Control c in tblSlots.Controls)
             {
                 c.Enabled = true;
             }
@@ -155,5 +155,6 @@ namespace ConnectFourApp
         {
             StartGame();
         }
+
     }
 }
