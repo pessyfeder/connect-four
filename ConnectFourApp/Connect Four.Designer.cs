@@ -41,10 +41,52 @@
             tblRow4 = new TableLayoutPanel();
             tblRow5 = new TableLayoutPanel();
             tblRow6 = new TableLayoutPanel();
+            button1 = new Button();
+            button2 = new Button();
+            button3 = new Button();
+            button4 = new Button();
+            button5 = new Button();
+            button6 = new Button();
+            button7 = new Button();
+            button8 = new Button();
+            button9 = new Button();
+            button10 = new Button();
+            button11 = new Button();
+            button12 = new Button();
+            button13 = new Button();
+            button14 = new Button();
+            button15 = new Button();
+            button16 = new Button();
+            button17 = new Button();
+            button18 = new Button();
+            button19 = new Button();
+            button20 = new Button();
+            button21 = new Button();
+            button22 = new Button();
+            button23 = new Button();
+            button24 = new Button();
+            button25 = new Button();
+            button26 = new Button();
+            button27 = new Button();
+            button28 = new Button();
+            button29 = new Button();
+            button30 = new Button();
+            button31 = new Button();
+            button32 = new Button();
+            button33 = new Button();
+            button34 = new Button();
+            button35 = new Button();
+            button36 = new Button();
             tblMain.SuspendLayout();
             tblControls.SuspendLayout();
             flwPlayerOptions.SuspendLayout();
             tblSlots.SuspendLayout();
+            tblRow1.SuspendLayout();
+            tblRow2.SuspendLayout();
+            tblRow3.SuspendLayout();
+            tblRow4.SuspendLayout();
+            tblRow5.SuspendLayout();
+            tblRow6.SuspendLayout();
             SuspendLayout();
             // 
             // tblMain
@@ -161,6 +203,12 @@
             // 
             tblRow1.ColumnCount = 1;
             tblRow1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tblRow1.Controls.Add(button1, 0, 0);
+            tblRow1.Controls.Add(button2, 0, 1);
+            tblRow1.Controls.Add(button3, 0, 2);
+            tblRow1.Controls.Add(button4, 0, 3);
+            tblRow1.Controls.Add(button5, 0, 4);
+            tblRow1.Controls.Add(button6, 0, 5);
             tblRow1.Dock = DockStyle.Fill;
             tblRow1.Location = new Point(3, 3);
             tblRow1.Name = "tblRow1";
@@ -178,6 +226,12 @@
             // 
             tblRow2.ColumnCount = 1;
             tblRow2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tblRow2.Controls.Add(button7, 0, 0);
+            tblRow2.Controls.Add(button8, 0, 1);
+            tblRow2.Controls.Add(button9, 0, 2);
+            tblRow2.Controls.Add(button10, 0, 3);
+            tblRow2.Controls.Add(button11, 0, 4);
+            tblRow2.Controls.Add(button12, 0, 5);
             tblRow2.Dock = DockStyle.Fill;
             tblRow2.Location = new Point(194, 3);
             tblRow2.Name = "tblRow2";
@@ -195,6 +249,12 @@
             // 
             tblRow3.ColumnCount = 1;
             tblRow3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tblRow3.Controls.Add(button13, 0, 0);
+            tblRow3.Controls.Add(button14, 0, 1);
+            tblRow3.Controls.Add(button15, 0, 2);
+            tblRow3.Controls.Add(button16, 0, 3);
+            tblRow3.Controls.Add(button17, 0, 4);
+            tblRow3.Controls.Add(button18, 0, 5);
             tblRow3.Dock = DockStyle.Fill;
             tblRow3.Location = new Point(385, 3);
             tblRow3.Name = "tblRow3";
@@ -212,6 +272,12 @@
             // 
             tblRow4.ColumnCount = 1;
             tblRow4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tblRow4.Controls.Add(button19, 0, 0);
+            tblRow4.Controls.Add(button20, 0, 1);
+            tblRow4.Controls.Add(button21, 0, 2);
+            tblRow4.Controls.Add(button22, 0, 3);
+            tblRow4.Controls.Add(button23, 0, 4);
+            tblRow4.Controls.Add(button24, 0, 5);
             tblRow4.Dock = DockStyle.Fill;
             tblRow4.Location = new Point(576, 3);
             tblRow4.Name = "tblRow4";
@@ -229,6 +295,12 @@
             // 
             tblRow5.ColumnCount = 1;
             tblRow5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tblRow5.Controls.Add(button25, 0, 0);
+            tblRow5.Controls.Add(button26, 0, 1);
+            tblRow5.Controls.Add(button27, 0, 2);
+            tblRow5.Controls.Add(button28, 0, 3);
+            tblRow5.Controls.Add(button29, 0, 4);
+            tblRow5.Controls.Add(button30, 0, 5);
             tblRow5.Dock = DockStyle.Fill;
             tblRow5.Location = new Point(767, 3);
             tblRow5.Name = "tblRow5";
@@ -246,6 +318,12 @@
             // 
             tblRow6.ColumnCount = 1;
             tblRow6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tblRow6.Controls.Add(button31, 0, 0);
+            tblRow6.Controls.Add(button32, 0, 1);
+            tblRow6.Controls.Add(button33, 0, 2);
+            tblRow6.Controls.Add(button34, 0, 3);
+            tblRow6.Controls.Add(button35, 0, 4);
+            tblRow6.Controls.Add(button36, 0, 5);
             tblRow6.Dock = DockStyle.Fill;
             tblRow6.Location = new Point(958, 3);
             tblRow6.Name = "tblRow6";
@@ -258,6 +336,330 @@
             tblRow6.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
             tblRow6.Size = new Size(188, 487);
             tblRow6.TabIndex = 5;
+            // 
+            // button1
+            // 
+            button1.Dock = DockStyle.Fill;
+            button1.Location = new Point(3, 3);
+            button1.Name = "button1";
+            button1.Size = new Size(179, 75);
+            button1.TabIndex = 0;
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            button2.Dock = DockStyle.Fill;
+            button2.Location = new Point(3, 84);
+            button2.Name = "button2";
+            button2.Size = new Size(179, 75);
+            button2.TabIndex = 1;
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            button3.Dock = DockStyle.Fill;
+            button3.Location = new Point(3, 165);
+            button3.Name = "button3";
+            button3.Size = new Size(179, 75);
+            button3.TabIndex = 2;
+            button3.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            button4.Dock = DockStyle.Fill;
+            button4.Location = new Point(3, 246);
+            button4.Name = "button4";
+            button4.Size = new Size(179, 75);
+            button4.TabIndex = 3;
+            button4.UseVisualStyleBackColor = true;
+            // 
+            // button5
+            // 
+            button5.Dock = DockStyle.Fill;
+            button5.Location = new Point(3, 327);
+            button5.Name = "button5";
+            button5.Size = new Size(179, 75);
+            button5.TabIndex = 4;
+            button5.UseVisualStyleBackColor = true;
+            // 
+            // button6
+            // 
+            button6.Dock = DockStyle.Fill;
+            button6.Location = new Point(3, 408);
+            button6.Name = "button6";
+            button6.Size = new Size(179, 76);
+            button6.TabIndex = 5;
+            button6.UseVisualStyleBackColor = true;
+            // 
+            // button7
+            // 
+            button7.Dock = DockStyle.Fill;
+            button7.Location = new Point(3, 3);
+            button7.Name = "button7";
+            button7.Size = new Size(179, 75);
+            button7.TabIndex = 0;
+            button7.UseVisualStyleBackColor = true;
+            // 
+            // button8
+            // 
+            button8.Dock = DockStyle.Fill;
+            button8.Location = new Point(3, 84);
+            button8.Name = "button8";
+            button8.Size = new Size(179, 75);
+            button8.TabIndex = 1;
+            button8.UseVisualStyleBackColor = true;
+            // 
+            // button9
+            // 
+            button9.Dock = DockStyle.Fill;
+            button9.Location = new Point(3, 165);
+            button9.Name = "button9";
+            button9.Size = new Size(179, 75);
+            button9.TabIndex = 2;
+            button9.UseVisualStyleBackColor = true;
+            // 
+            // button10
+            // 
+            button10.Dock = DockStyle.Fill;
+            button10.Location = new Point(3, 246);
+            button10.Name = "button10";
+            button10.Size = new Size(179, 75);
+            button10.TabIndex = 3;
+            button10.UseVisualStyleBackColor = true;
+            // 
+            // button11
+            // 
+            button11.Dock = DockStyle.Fill;
+            button11.Location = new Point(3, 327);
+            button11.Name = "button11";
+            button11.Size = new Size(179, 75);
+            button11.TabIndex = 4;
+            button11.UseVisualStyleBackColor = true;
+            // 
+            // button12
+            // 
+            button12.Dock = DockStyle.Fill;
+            button12.Location = new Point(3, 408);
+            button12.Name = "button12";
+            button12.Size = new Size(179, 76);
+            button12.TabIndex = 5;
+            button12.UseVisualStyleBackColor = true;
+            // 
+            // button13
+            // 
+            button13.Dock = DockStyle.Fill;
+            button13.Location = new Point(3, 3);
+            button13.Name = "button13";
+            button13.Size = new Size(179, 75);
+            button13.TabIndex = 0;
+            button13.UseVisualStyleBackColor = true;
+            // 
+            // button14
+            // 
+            button14.Dock = DockStyle.Fill;
+            button14.Location = new Point(3, 84);
+            button14.Name = "button14";
+            button14.Size = new Size(179, 75);
+            button14.TabIndex = 1;
+            button14.UseVisualStyleBackColor = true;
+            // 
+            // button15
+            // 
+            button15.Dock = DockStyle.Fill;
+            button15.Location = new Point(3, 165);
+            button15.Name = "button15";
+            button15.Size = new Size(179, 75);
+            button15.TabIndex = 2;
+            button15.UseVisualStyleBackColor = true;
+            // 
+            // button16
+            // 
+            button16.Dock = DockStyle.Fill;
+            button16.Location = new Point(3, 246);
+            button16.Name = "button16";
+            button16.Size = new Size(179, 75);
+            button16.TabIndex = 3;
+            button16.UseVisualStyleBackColor = true;
+            // 
+            // button17
+            // 
+            button17.Dock = DockStyle.Fill;
+            button17.Location = new Point(3, 327);
+            button17.Name = "button17";
+            button17.Size = new Size(179, 75);
+            button17.TabIndex = 4;
+            button17.UseVisualStyleBackColor = true;
+            // 
+            // button18
+            // 
+            button18.Dock = DockStyle.Fill;
+            button18.Location = new Point(3, 408);
+            button18.Name = "button18";
+            button18.Size = new Size(179, 76);
+            button18.TabIndex = 5;
+            button18.UseVisualStyleBackColor = true;
+            // 
+            // button19
+            // 
+            button19.Dock = DockStyle.Fill;
+            button19.Location = new Point(3, 3);
+            button19.Name = "button19";
+            button19.Size = new Size(179, 75);
+            button19.TabIndex = 0;
+            button19.UseVisualStyleBackColor = true;
+            // 
+            // button20
+            // 
+            button20.Dock = DockStyle.Fill;
+            button20.Location = new Point(3, 84);
+            button20.Name = "button20";
+            button20.Size = new Size(179, 75);
+            button20.TabIndex = 1;
+            button20.UseVisualStyleBackColor = true;
+            // 
+            // button21
+            // 
+            button21.Dock = DockStyle.Fill;
+            button21.Location = new Point(3, 165);
+            button21.Name = "button21";
+            button21.Size = new Size(179, 75);
+            button21.TabIndex = 2;
+            button21.UseVisualStyleBackColor = true;
+            // 
+            // button22
+            // 
+            button22.Dock = DockStyle.Fill;
+            button22.Location = new Point(3, 246);
+            button22.Name = "button22";
+            button22.Size = new Size(179, 75);
+            button22.TabIndex = 3;
+            button22.UseVisualStyleBackColor = true;
+            // 
+            // button23
+            // 
+            button23.Dock = DockStyle.Fill;
+            button23.Location = new Point(3, 327);
+            button23.Name = "button23";
+            button23.Size = new Size(179, 75);
+            button23.TabIndex = 4;
+            button23.UseVisualStyleBackColor = true;
+            // 
+            // button24
+            // 
+            button24.Dock = DockStyle.Fill;
+            button24.Location = new Point(3, 408);
+            button24.Name = "button24";
+            button24.Size = new Size(179, 76);
+            button24.TabIndex = 5;
+            button24.UseVisualStyleBackColor = true;
+            // 
+            // button25
+            // 
+            button25.Dock = DockStyle.Fill;
+            button25.Location = new Point(3, 3);
+            button25.Name = "button25";
+            button25.Size = new Size(179, 75);
+            button25.TabIndex = 0;
+            button25.UseVisualStyleBackColor = true;
+            // 
+            // button26
+            // 
+            button26.Dock = DockStyle.Fill;
+            button26.Location = new Point(3, 84);
+            button26.Name = "button26";
+            button26.Size = new Size(179, 75);
+            button26.TabIndex = 1;
+            button26.UseVisualStyleBackColor = true;
+            // 
+            // button27
+            // 
+            button27.Dock = DockStyle.Fill;
+            button27.Location = new Point(3, 165);
+            button27.Name = "button27";
+            button27.Size = new Size(179, 75);
+            button27.TabIndex = 2;
+            button27.UseVisualStyleBackColor = true;
+            // 
+            // button28
+            // 
+            button28.Dock = DockStyle.Fill;
+            button28.Location = new Point(3, 246);
+            button28.Name = "button28";
+            button28.Size = new Size(179, 75);
+            button28.TabIndex = 3;
+            button28.UseVisualStyleBackColor = true;
+            // 
+            // button29
+            // 
+            button29.Dock = DockStyle.Fill;
+            button29.Location = new Point(3, 327);
+            button29.Name = "button29";
+            button29.Size = new Size(179, 75);
+            button29.TabIndex = 4;
+            button29.UseVisualStyleBackColor = true;
+            // 
+            // button30
+            // 
+            button30.Dock = DockStyle.Fill;
+            button30.Location = new Point(3, 408);
+            button30.Name = "button30";
+            button30.Size = new Size(179, 76);
+            button30.TabIndex = 5;
+            button30.UseVisualStyleBackColor = true;
+            // 
+            // button31
+            // 
+            button31.Dock = DockStyle.Fill;
+            button31.Location = new Point(3, 3);
+            button31.Name = "button31";
+            button31.Size = new Size(182, 75);
+            button31.TabIndex = 0;
+            button31.UseVisualStyleBackColor = true;
+            // 
+            // button32
+            // 
+            button32.Dock = DockStyle.Fill;
+            button32.Location = new Point(3, 84);
+            button32.Name = "button32";
+            button32.Size = new Size(182, 75);
+            button32.TabIndex = 1;
+            button32.UseVisualStyleBackColor = true;
+            // 
+            // button33
+            // 
+            button33.Dock = DockStyle.Fill;
+            button33.Location = new Point(3, 165);
+            button33.Name = "button33";
+            button33.Size = new Size(182, 75);
+            button33.TabIndex = 2;
+            button33.UseVisualStyleBackColor = true;
+            // 
+            // button34
+            // 
+            button34.Dock = DockStyle.Fill;
+            button34.Location = new Point(3, 246);
+            button34.Name = "button34";
+            button34.Size = new Size(182, 75);
+            button34.TabIndex = 3;
+            button34.UseVisualStyleBackColor = true;
+            // 
+            // button35
+            // 
+            button35.Dock = DockStyle.Fill;
+            button35.Location = new Point(3, 327);
+            button35.Name = "button35";
+            button35.Size = new Size(182, 75);
+            button35.TabIndex = 4;
+            button35.UseVisualStyleBackColor = true;
+            // 
+            // button36
+            // 
+            button36.Dock = DockStyle.Fill;
+            button36.Location = new Point(3, 408);
+            button36.Name = "button36";
+            button36.Size = new Size(182, 76);
+            button36.TabIndex = 5;
+            button36.UseVisualStyleBackColor = true;
             // 
             // frmConnectFour
             // 
@@ -273,6 +675,12 @@
             flwPlayerOptions.ResumeLayout(false);
             flwPlayerOptions.PerformLayout();
             tblSlots.ResumeLayout(false);
+            tblRow1.ResumeLayout(false);
+            tblRow2.ResumeLayout(false);
+            tblRow3.ResumeLayout(false);
+            tblRow4.ResumeLayout(false);
+            tblRow5.ResumeLayout(false);
+            tblRow6.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -291,5 +699,41 @@
         private TableLayoutPanel tblRow4;
         private TableLayoutPanel tblRow5;
         private TableLayoutPanel tblRow6;
+        private Button button1;
+        private Button button2;
+        private Button button3;
+        private Button button4;
+        private Button button5;
+        private Button button6;
+        private Button button7;
+        private Button button8;
+        private Button button9;
+        private Button button10;
+        private Button button11;
+        private Button button12;
+        private Button button13;
+        private Button button14;
+        private Button button15;
+        private Button button16;
+        private Button button17;
+        private Button button18;
+        private Button button19;
+        private Button button20;
+        private Button button21;
+        private Button button22;
+        private Button button23;
+        private Button button24;
+        private Button button25;
+        private Button button26;
+        private Button button27;
+        private Button button28;
+        private Button button29;
+        private Button button30;
+        private Button button31;
+        private Button button32;
+        private Button button33;
+        private Button button34;
+        private Button button35;
+        private Button button36;
     }
 }
