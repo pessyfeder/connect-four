@@ -680,6 +680,7 @@
             // 
             button38.Dock = DockStyle.Fill;
             button38.Enabled = false;
+            button38.ForeColor = SystemColors.ControlDarkDark;
             button38.Location = new Point(984, 87);
             button38.Name = "button38";
             button38.Size = new Size(159, 72);

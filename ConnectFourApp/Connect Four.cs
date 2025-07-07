@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace ConnectFourApp
 {
     public partial class frmConnectFour : Form
@@ -18,9 +20,11 @@ namespace ConnectFourApp
         List<List<Button>> lstDiagonalLeftRightWinningSets;
         List<List<Button>> lstDiagonalRightLeftWinningSets;
 
+        List<List<List<Button>>> lstWinningSets;
+
         bool playAgainstComp = false;
-        private enum TurnEnum { red, white };
-        TurnEnum currentTurn = TurnEnum.white;
+        private enum TurnEnum { Red, White };
+        TurnEnum currentTurn = TurnEnum.Red;
 
         enum GameStatusEnum { NotStarted, Playing, Tie, Winner };
         GameStatusEnum gameStatus = GameStatusEnum.NotStarted;
@@ -123,33 +127,87 @@ namespace ConnectFourApp
                 new() { button4, button9, button14, button19 }
             };
 
+            lstWinningSets = new() { lstVerticalWinningSets, lstHorizontalWinningSets, lstDiagonalLeftRightWinningSets, lstDiagonalLeftRightWinningSets };
 
             btnStart.Click += BtnStart_Click;
         }
 
         //Procedures
 
-        private void StopGame()
+        //When a user clicks on any invisible button in a column, the lowest invisible button: 
+        //becomes visible 
+        //turns the color of the current turn
+
+        private void SetButtonBackColor(Button btn)
         {
-            foreach (Control c in tblSlots.Controls)
+            Color c = currentTurn == TurnEnum.Red ? Color.Red : Color.White;
+            btn.BackColor = c;
+        }
+
+
+        //Call this procedure from anycolumnbutton.Click
+        //Maybe do seperate procedures for each column? or is that not necessary?
+        //maybe pass column list in as parameter for now - to test if it works.
+
+        private void SwitchTurns()
+        {
+            currentTurn = currentTurn == TurnEnum.Red ? TurnEnum.White : TurnEnum.Red;
+        }
+
+        private void DoTurn()
+        {
+            //first switch turns
+            if (gameStatus == GameStatusEnum.Playing)
             {
-                c.Enabled = false;
+                SwitchTurns();
+
+                var lst = lstBtnColumnLists.FirstOrDefault(column => column.Any(btn => !btn.Visible));
+                if (lst != null)
+                {
+                    //put that color onto the lowest available button in the column
+                    Button b = lst.First(btn => !btn.Visible);
+                    b.Visible = true;
+                    SetButtonBackColor(b);
+                }
+            }            
+        }
+
+        //Display game status on start button
+        private void DisplayGameStatus()
+        {
+            string msg = "Click 'Start' to start game";
+
+            switch (gameStatus)
+            {
+                case GameStatusEnum.Playing:
+                    msg = "Current turn: " + currentTurn.ToString();
+                    break;
+                case GameStatusEnum.Tie:
+                    msg = "Tie!";
+                    break;
+                case GameStatusEnum.Winner:
+                    msg = "Winner is: " + currentTurn.ToString();
+                    break;
             }
 
-            btnStart.Enabled = true;
-            opt2Player.Enabled = true;
-            optPlayAgainstComp.Enabled = true;
+            msg = playAgainstComp ? optPlayAgainstComp.Text + " - " + msg : opt2Player.Text + " - " + msg;
+
+            btnStart.Text = msg;
         }
+
         private void StartGame()
         {
             foreach (Control c in tblSlots.Controls)
             {
                 c.Enabled = true;
+                c.BackColor = Control.DefaultBackColor;
+                c.Visible = false;
             }
 
-            btnStart.Enabled = false;
             opt2Player.Enabled = false;
             optPlayAgainstComp.Enabled = false;
+
+            DisplayGameStatus();
         }
         private void BtnStart_Click(object? sender, EventArgs e)
         {
