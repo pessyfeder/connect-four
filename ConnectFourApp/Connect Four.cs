@@ -192,13 +192,12 @@ namespace ConnectFourApp
             {
                 if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
                 {
+                    SwitchTurns();
                     //put that color onto the lowest available button in the column
                     Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
                     SetButtonBackColor(b);
                     List<Button> currentButtons = lstWinningSets.SelectMany(winningSet => winningSet).SelectMany(buttonList => buttonList).ToList();
-                    //checking for winner or tie before switching turns
                     DetectWinnerorTie(currentButtons);
-                    SwitchTurns();
                 }
                 else
                 {
