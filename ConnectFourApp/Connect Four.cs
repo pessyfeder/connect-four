@@ -44,93 +44,34 @@ namespace ConnectFourApp
 
             lstBtnColumnLists = new() { lstBtnColumn1, lstBtnColumn2, lstBtnColumn3, lstBtnColumn4, lstBtnColumn5, lstBtnColumn6 };
 
-            lstVerticalWinningSets = new()
+            lstWinningSets = new()
             {
-                new() { button1, button2, button3, button4 },
-                new() { button2, button3, button4, button5 },
-                new() { button3, button4, button5, button6 },
-                new() { button7, button8, button9, button10 },
-                new() { button8, button9, button10, button11 },
-                new() { button9, button10, button11, button12 },
-                new() { button13, button14, button15, button16 },
-                new() { button14, button15, button16, button17 },
-                new() { button15, button16, button17, button18 },
-                new() { button19, button20, button21, button22 },
-                new() { button20, button21, button22, button23 },
-                new() { button21, button22, button23, button24 },
-                new() { button25, button26, button27, button28 },
-                new() { button26, button27, button28, button29 },
-                new() { button27, button28, button29, button30 },
-                new() { button31, button32, button33, button34 },
-                new() { button32, button33, button34, button35 },
-                new() { button33, button34, button35, button36 },
-                new() { button37, button38, button39, button40 },
-                new() { button38, button39, button40, button41 },
-                new() { button39, button40, button41, button42 },
-            };
-
-            lstHorizontalWinningSets = new()
-            {
-                new() { button1, button7, button13, button19 },
-                new() { button25, button7, button13, button19 },
-                new() { button25, button31, button13, button19 },
-                new() { button25, button31, button37, button19 },
-                new() { button2, button8, button14, button20 },
-                new() { button26, button8, button14, button20 },
-                new() { button14, button20, button26, button32 },
-                new() { button20, button26, button32, button38 },
-                new() { button3, button9, button15, button21 },
-                new() { button9, button15, button21, button27 },
-                new() { button15, button21, button27, button33 },
-                new() { button21, button27, button33, button39 },
-                new() { button4, button10, button16, button22 },
-                new() { button10, button16, button22, button28 },
-                new() { button16, button22, button28, button34 },
-                new() { button22, button28, button34, button40 },
-                new() { button5, button11, button17, button23 },
-                new() { button11, button17, button23, button29 },
-                new() { button17, button23, button29, button35 },
-                new() { button23, button29, button35, button41 },
-                new() { button6, button12, button18, button24 },
-                new() { button12, button18, button24, button30 },
-                new() { button18, button24, button30, button36 },
-                new() { button24, button30, button36, button42 },
-            };
-
-            lstDiagonalLeftRightWinningSets = new()
-            {
+                new() { button1, button2, button3, button4, button5, button6 },
+                new() { button7, button8, button9, button10, button11, button12 },                
+                new() { button13, button14, button15, button16, button17, button18 },
+                new() { button19, button20, button21, button22, button23, button24 },
+                new() { button25, button26, button27, button28, button29, button30 },
+                new() { button31, button32, button33, button34, button35, button36 },
+                new() { button37, button38, button39, button40, button41, button42 },           
+                new() { button1, button7, button13, button19, button25, button31, button37 },                
+                new() { button2, button8, button14, button20, button26, button32, button38 },
+                new() { button3, button9, button15, button21, button27, button33, button39 },
+                new() { button4, button10, button16, button22, button28, button34, button40 },
+                new() { button5, button11, button17, button23, button29, button35, button41 },
+                new() { button6, button12, button18, button24, button30, button36, button42 },           
                 new() { button3, button10, button17, button24 },
-                new() { button2, button9, button16, button23 },
-                new() { button9, button16, button23, button30 },
-                new() { button1, button8, button15, button22 },
-                new() { button8, button15, button22, button29 },
-                new() { button15, button22, button29, button36 },
-                new() { button7, button14, button21, button28 },
-                new() { button14, button21, button28, button35 },
-                new() { button21, button28, button35, button42 },
-                new() { button13, button20, button27, button34 },
-                new() { button20, button27, button34, button41 },
-                new() { button19, button26, button33, button40 }
-            };
-
-            lstDiagonalRightLeftWinningSets = new()
-            {
+                new() { button2, button9, button16, button23, button30 },
+                new() { button1, button8, button15, button22, button29, button36 },
+                new() { button7, button14, button21, button28, button35, button42 },
+                new() { button13, button20, button27, button34, button41 },
+                new() { button19, button26, button33, button40 },         
                 new() { button39, button34, button29, button24 },
-                new() { button18, button23, button28, button33 },
-                new() { button23, button28, button33, button38 },
-                new() { button12, button17, button22, button27 },
-
-                new() { button17, button22, button27, button32 },
-                new() { button22, button27, button32, button37 },
-                new() { button6, button11, button16, button21 },
-                new() { button11, button16, button21, button26 },
-                new() { button16, button21, button26, button31 },
-                new() { button5, button10, button15, button20 },
-                new() { button10, button15, button20, button25 },
+                new() { button18, button23, button28, button33, button38 },
+                new() { button12, button17, button22, button27, button32, button37 },
+                new() { button6, button11, button16, button21, button26, button31 },
+                new() { button5, button10, button15, button20, button20, button25 },
                 new() { button4, button9, button14, button19 }
             };
-
-            lstWinningSets = new() { lstVerticalWinningSets, lstHorizontalWinningSets, lstDiagonalLeftRightWinningSets, lstDiagonalLeftRightWinningSets };
 
             btnStart.Click += BtnStart_Click;
 
@@ -146,18 +87,15 @@ namespace ConnectFourApp
         private void SetButtonBackColor(Button btn)
         {
             Color c = Color.Transparent;
-            switch (gameStatus)
+            if (gameStatus == GameStatusEnum.Playing)
             {
-                case GameStatusEnum.NotStarted:
-                    c = Color.Transparent;
-                    break;
-                case GameStatusEnum.Playing:
-                    c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
-                    break;
-            }
+                c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
 
+            }
             btn.BackColor = c;
         }
+
+        
         private void DetectTie()
         {
             foreach (List<Button> lstbtn in lstBtnColumnLists)
@@ -192,12 +130,12 @@ namespace ConnectFourApp
             {
                 if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
                 {
-                    SwitchTurns();
                     //put that color onto the lowest available button in the column
                     Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
                     SetButtonBackColor(b);
                     List<Button> currentButtons = lstWinningSets.SelectMany(winningSet => winningSet).SelectMany(buttonList => buttonList).ToList();
                     DetectWinnerorTie(currentButtons);
+                    SwitchTurns();
                 }
                 else
                 {
