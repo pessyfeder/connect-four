@@ -139,7 +139,6 @@ namespace ConnectFourApp
                     b.Click += B_Click;
                 }
             }
-
         }
 
        

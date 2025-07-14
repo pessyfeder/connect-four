@@ -220,7 +220,6 @@
             tblSlots.Controls.Add(button41, 6, 4);
             tblSlots.Controls.Add(button42, 6, 5);
             tblSlots.Dock = DockStyle.Fill;
-            tblSlots.Enabled = false;
             tblSlots.Location = new Point(3, 168);
             tblSlots.Name = "tblSlots";
             tblSlots.RowCount = 6;
@@ -249,6 +248,7 @@
             // 
             button1.BackColor = Color.Transparent;
             button1.Dock = DockStyle.Fill;
+            button1.Enabled = false;
             button1.Location = new Point(6, 6);
             button1.Name = "button1";
             button1.Size = new Size(154, 72);
