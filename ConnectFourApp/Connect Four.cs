@@ -46,25 +46,25 @@ namespace ConnectFourApp
             {
                 new() { button1, button2, button3, button4 },
                 new() { button2, button3, button4, button5 },
-                new() { button6, button3, button4, button5 },
+                new() { button3, button4, button5, button6 },
                 new() { button7, button8, button9, button10 },
-                new() { button11, button8, button9, button10 },
-                new() { button11, button12, button9, button10 },
+                new() { button8, button9, button10, button11 },
+                new() { button9, button10, button11, button12 },
                 new() { button13, button14, button15, button16 },
-                new() { button17, button14, button15, button16 },
-                new() { button17, button18, button15, button16 },
+                new() { button14, button15, button16, button17 },
+                new() { button15, button16, button17, button18 },
                 new() { button19, button20, button21, button22 },
                 new() { button20, button21, button22, button23 },
-                new() { button24, button21, button22, button23 },
+                new() { button21, button22, button23, button24 },
                 new() { button25, button26, button27, button28 },
-                new() { button29, button26, button27, button28 },
-                new() { button29, button30, button27, button28 },
-                new() { button33, button34, button31, button32 },
-                new() { button33, button34, button35, button32 },
+                new() { button26, button27, button28, button29 },
+                new() { button27, button28, button29, button30 },
+                new() { button31, button32, button33, button34 },
+                new() { button32, button33, button34, button35 },
                 new() { button33, button34, button35, button36 },
                 new() { button37, button38, button39, button40 },
-                new() { button41, button38, button39, button40 },
-                new() { button41, button42, button39, button40 },
+                new() { button38, button39, button40, button41 },
+                new() { button39, button40, button41, button42 },
             };
 
             lstHorizontalWinningSets = new()
@@ -117,6 +117,7 @@ namespace ConnectFourApp
                 new() { button18, button23, button28, button33 },
                 new() { button23, button28, button33, button38 },
                 new() { button12, button17, button22, button27 },
+
                 new() { button17, button22, button27, button32 },
                 new() { button22, button27, button32, button37 },
                 new() { button6, button11, button16, button21 },
@@ -131,12 +132,17 @@ namespace ConnectFourApp
 
             btnStart.Click += BtnStart_Click;
 
-            foreach (List<Button> lstbtn in lstBtnColumnLists)
+            foreach (Control c in tblSlots.Controls)
             {
-                lstbtn.ForEach(b => b.Click += B_Click);
+                if (c is Button b)
+                {
+                    b.Click += B_Click;
+                }
             }
-            
+
         }
+
+       
 
         //Procedures
         private void SetButtonBackColor(Button btn)
@@ -149,8 +155,6 @@ namespace ConnectFourApp
             currentTurn = currentTurn == TurnEnum.Red ? TurnEnum.White : TurnEnum.Red;
         }
 
-        //pass in column name as a parameter
-        //seperate click events for each column
         private void DoTurn(List<Button> lstbtn)
         {
             //first switch turns
@@ -158,11 +162,10 @@ namespace ConnectFourApp
             {
                 SwitchTurns();
 
-                if (lstbtn.Any(btn => !btn.Visible))
+                if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
                 {
                     //put that color onto the lowest available button in the column
-                    Button b = lstbtn.Last(btn => !btn.Visible);
-                    b.Visible = true;
+                    Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
                     SetButtonBackColor(b);
                 }
             }
@@ -197,9 +200,11 @@ namespace ConnectFourApp
         {
             foreach (Control c in tblSlots.Controls)
             {
-                c.Enabled = true;
-                c.BackColor = Control.DefaultBackColor;
-                c.Visible = false;
+                if (c is Button b)
+                {
+                    b.Enabled = true;                    
+                    b.BackColor = Color.Green;
+                }
             }
 
             opt2Player.Enabled = false;
@@ -245,7 +250,7 @@ namespace ConnectFourApp
                 }
             }
         }
-
+      
 
     }
 }
