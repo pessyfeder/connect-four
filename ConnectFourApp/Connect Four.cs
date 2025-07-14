@@ -130,46 +130,44 @@ namespace ConnectFourApp
             lstWinningSets = new() { lstVerticalWinningSets, lstHorizontalWinningSets, lstDiagonalLeftRightWinningSets, lstDiagonalLeftRightWinningSets };
 
             btnStart.Click += BtnStart_Click;
+
+            foreach (List<Button> lstbtn in lstBtnColumnLists)
+            {
+                lstbtn.ForEach(b => b.Click += B_Click);
+            }
+            
         }
 
         //Procedures
-
-        //When a user clicks on any invisible button in a column, the lowest invisible button: 
-        //becomes visible 
-        //turns the color of the current turn
-
         private void SetButtonBackColor(Button btn)
         {
             Color c = currentTurn == TurnEnum.Red ? Color.Red : Color.White;
             btn.BackColor = c;
         }
-
-
-        //Call this procedure from anycolumnbutton.Click
-        //Maybe do seperate procedures for each column? or is that not necessary?
-        //maybe pass column list in as parameter for now - to test if it works.
-
         private void SwitchTurns()
         {
             currentTurn = currentTurn == TurnEnum.Red ? TurnEnum.White : TurnEnum.Red;
         }
 
-        private void DoTurn()
+        //pass in column name as a parameter
+        //seperate click events for each column
+        private void DoTurn(List<Button> lstbtn)
         {
             //first switch turns
             if (gameStatus == GameStatusEnum.Playing)
             {
                 SwitchTurns();
 
-                var lst = lstBtnColumnLists.FirstOrDefault(column => column.Any(btn => !btn.Visible));
-                if (lst != null)
+                if (lstbtn.Any(btn => !btn.Visible))
                 {
                     //put that color onto the lowest available button in the column
-                    Button b = lst.First(btn => !btn.Visible);
+                    Button b = lstbtn.Last(btn => !btn.Visible);
                     b.Visible = true;
                     SetButtonBackColor(b);
                 }
-            }            
+            }
+
+            DisplayGameStatus();
         }
 
         //Display game status on start button
@@ -207,12 +205,47 @@ namespace ConnectFourApp
             opt2Player.Enabled = false;
             optPlayAgainstComp.Enabled = false;
 
+            gameStatus = GameStatusEnum.Playing;
+
             DisplayGameStatus();
         }
         private void BtnStart_Click(object? sender, EventArgs e)
         {
             StartGame();
         }
+        private void B_Click(object? sender, EventArgs e)
+        {
+            if (sender is Button)
+            {
+                Button clickedButton = (Button)sender;
+
+                if (lstBtnColumn1.Contains(clickedButton))
+                {
+                    DoTurn(lstBtnColumn1);
+                }
+                else if (lstBtnColumn2.Contains(clickedButton))
+                {
+                    DoTurn(lstBtnColumn2);
+                }
+                else if (lstBtnColumn3.Contains(clickedButton))
+                {
+                    DoTurn(lstBtnColumn3);
+                }
+                else if (lstBtnColumn4.Contains(clickedButton))
+                {
+                    DoTurn(lstBtnColumn4);
+                }
+                else if (lstBtnColumn5.Contains(clickedButton))
+                {
+                    DoTurn(lstBtnColumn5);
+                }
+                else if (lstBtnColumn6.Contains(clickedButton))
+                {
+                    DoTurn(lstBtnColumn6);
+                }
+            }
+        }
+
 
     }
 }
