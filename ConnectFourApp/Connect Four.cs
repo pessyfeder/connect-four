@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace ConnectFourApp
 {
@@ -141,14 +143,43 @@ namespace ConnectFourApp
             }
         }
 
-       
-
-        //Procedures
         private void SetButtonBackColor(Button btn)
         {
-            Color c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
+            Color c = Color.Transparent;
+            switch (gameStatus)
+            {
+                case GameStatusEnum.NotStarted:
+                    c = Color.Transparent;
+                    break;
+                case GameStatusEnum.Playing:
+                    c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
+                    break;
+            }
+
             btn.BackColor = c;
         }
+        private void DetectTie()
+        {
+            foreach (List<Button> lstbtn in lstBtnColumnLists)
+                if (lstbtn.Where(b => b.BackColor == Color.Transparent).Count() == 0)
+                {
+                    gameStatus = GameStatusEnum.Tie;
+                    lstbtn.ForEach(b => SetButtonBackColor(b));
+                    return;
+                }
+        }
+        private void DetectWinnerorTie(List<Button> lstbtn)
+        {
+
+            if (lstbtn.Count(b => b.BackColor == Color.Red || b.BackColor == Color.Blue) == 4)
+            {
+                gameStatus = GameStatusEnum.Winner;
+                lstbtn.ForEach(b => SetButtonBackColor(b));
+                return;
+            }
+            DetectTie();
+        }
+
         private void SwitchTurns()
         {
             currentTurn = currentTurn == TurnEnum.Red ? TurnEnum.Blue : TurnEnum.Red;
@@ -159,14 +190,15 @@ namespace ConnectFourApp
             //first switch turns
             if (gameStatus == GameStatusEnum.Playing)
             {
-
                 if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
                 {
                     //put that color onto the lowest available button in the column
                     Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
                     SetButtonBackColor(b);
+                    List<Button> currentButtons = lstWinningSets.SelectMany(winningSet => winningSet).SelectMany(buttonList => buttonList).ToList();
+                    //checking for winner or tie before switching turns
+                    DetectWinnerorTie(currentButtons);
                     SwitchTurns();
-
                 }
                 else
                 {
@@ -206,7 +238,7 @@ namespace ConnectFourApp
             {
                 if (c is Button b)
                 {
-                    b.Enabled = true;                    
+                    b.Enabled = true;
                     b.BackColor = Color.Transparent;
                 }
             }
@@ -254,7 +286,7 @@ namespace ConnectFourApp
                 }
             }
         }
-      
+
 
     }
 }
