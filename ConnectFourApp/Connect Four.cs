@@ -23,7 +23,7 @@ namespace ConnectFourApp
         List<List<List<Button>>> lstWinningSets;
 
         bool playAgainstComp = false;
-        private enum TurnEnum { Red, White };
+        private enum TurnEnum { Red, Blue };
         TurnEnum currentTurn = TurnEnum.Red;
 
         enum GameStatusEnum { NotStarted, Playing, Tie, Winner };
@@ -146,12 +146,12 @@ namespace ConnectFourApp
         //Procedures
         private void SetButtonBackColor(Button btn)
         {
-            Color c = currentTurn == TurnEnum.Red ? Color.Red : Color.White;
+            Color c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
             btn.BackColor = c;
         }
         private void SwitchTurns()
         {
-            currentTurn = currentTurn == TurnEnum.Red ? TurnEnum.White : TurnEnum.Red;
+            currentTurn = currentTurn == TurnEnum.Red ? TurnEnum.Blue : TurnEnum.Red;
         }
 
         private void DoTurn(List<Button> lstbtn)
@@ -159,13 +159,18 @@ namespace ConnectFourApp
             //first switch turns
             if (gameStatus == GameStatusEnum.Playing)
             {
-                SwitchTurns();
 
                 if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
                 {
                     //put that color onto the lowest available button in the column
                     Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
                     SetButtonBackColor(b);
+                    SwitchTurns();
+
+                }
+                else
+                {
+                    MessageBox.Show("Slot is unavailable. Please select another slot.");
                 }
             }
 
@@ -202,7 +207,7 @@ namespace ConnectFourApp
                 if (c is Button b)
                 {
                     b.Enabled = true;                    
-                    b.BackColor = Color.Green;
+                    b.BackColor = Color.Transparent;
                 }
             }
 
