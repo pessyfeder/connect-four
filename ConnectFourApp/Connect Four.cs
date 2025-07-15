@@ -7,6 +7,7 @@ namespace ConnectFourApp
     public partial class frmConnectFour : Form
     {
         Random rnd = new();
+        System.Windows.Forms.Timer tmr = new();
 
         List<Button> lstBtnColumn1;
         List<Button> lstBtnColumn2;
@@ -16,13 +17,7 @@ namespace ConnectFourApp
         List<Button> lstBtnColumn6;
 
         List<List<Button>> lstBtnColumnLists;
-
-        List<List<Button>> lstVerticalWinningSets;
-        List<List<Button>> lstHorizontalWinningSets;
-        List<List<Button>> lstDiagonalLeftRightWinningSets;
-        List<List<Button>> lstDiagonalRightLeftWinningSets;
-
-        List<List<List<Button>>> lstWinningSets;
+        List<List<Button>> lstWinningSets;
 
         bool playAgainstComp = false;
         private enum TurnEnum { Red, Blue };
@@ -90,12 +85,23 @@ namespace ConnectFourApp
             if (gameStatus == GameStatusEnum.Playing)
             {
                 c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
-
             }
-            btn.BackColor = c;
+            else if (gameStatus == GameStatusEnum.Winner)
+            {
+                tmr.Interval = 500;
+                //tmr.Enabled = !tmr.Enabled;
+                tmr.Tick += Tmr_Tick; ;
+                tmr.Start();
+            }
+                btn.BackColor = c;
         }
 
-        
+        private void Tmr_Tick(object? sender, EventArgs e)
+        {
+            lstWinningSets.ForEach(lst => DetectWinnerorTie(lst));
+            
+        }
+
         private void DetectTie()
         {
             foreach (List<Button> lstbtn in lstBtnColumnLists)
@@ -133,8 +139,7 @@ namespace ConnectFourApp
                     //put that color onto the lowest available button in the column
                     Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
                     SetButtonBackColor(b);
-                    List<Button> currentButtons = lstWinningSets.SelectMany(winningSet => winningSet).SelectMany(buttonList => buttonList).ToList();
-                    DetectWinnerorTie(currentButtons);
+                    lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
                     SwitchTurns();
                 }
                 else
