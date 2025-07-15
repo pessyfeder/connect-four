@@ -8,6 +8,7 @@ namespace ConnectFourApp
     {
         Random rnd = new();
         System.Windows.Forms.Timer tmr = new();
+        int tickCount = 0;
 
         List<Button> lstBtnColumn1;
         List<Button> lstBtnColumn2;
@@ -42,24 +43,24 @@ namespace ConnectFourApp
             lstWinningSets = new()
             {
                 new() { button1, button2, button3, button4, button5, button6 },
-                new() { button7, button8, button9, button10, button11, button12 },                
+                new() { button7, button8, button9, button10, button11, button12 },
                 new() { button13, button14, button15, button16, button17, button18 },
                 new() { button19, button20, button21, button22, button23, button24 },
                 new() { button25, button26, button27, button28, button29, button30 },
                 new() { button31, button32, button33, button34, button35, button36 },
-                new() { button37, button38, button39, button40, button41, button42 },           
-                new() { button1, button7, button13, button19, button25, button31, button37 },                
+                new() { button37, button38, button39, button40, button41, button42 },
+                new() { button1, button7, button13, button19, button25, button31, button37 },
                 new() { button2, button8, button14, button20, button26, button32, button38 },
                 new() { button3, button9, button15, button21, button27, button33, button39 },
                 new() { button4, button10, button16, button22, button28, button34, button40 },
                 new() { button5, button11, button17, button23, button29, button35, button41 },
-                new() { button6, button12, button18, button24, button30, button36, button42 },           
+                new() { button6, button12, button18, button24, button30, button36, button42 },
                 new() { button3, button10, button17, button24 },
                 new() { button2, button9, button16, button23, button30 },
                 new() { button1, button8, button15, button22, button29, button36 },
                 new() { button7, button14, button21, button28, button35, button42 },
                 new() { button13, button20, button27, button34, button41 },
-                new() { button19, button26, button33, button40 },         
+                new() { button19, button26, button33, button40 },
                 new() { button39, button34, button29, button24 },
                 new() { button18, button23, button28, button33, button38 },
                 new() { button12, button17, button22, button27, button32, button37 },
@@ -86,21 +87,10 @@ namespace ConnectFourApp
             {
                 c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
             }
-            else if (gameStatus == GameStatusEnum.Winner)
-            {
-                tmr.Interval = 500;
-                //tmr.Enabled = !tmr.Enabled;
-                tmr.Tick += Tmr_Tick; ;
-                tmr.Start();
-            }
-                btn.BackColor = c;
+            btn.BackColor = c;
         }
 
-        private void Tmr_Tick(object? sender, EventArgs e)
-        {
-            lstWinningSets.ForEach(lst => DetectWinnerorTie(lst));
-            
-        }
+
 
         private void DetectTie()
         {
@@ -109,19 +99,55 @@ namespace ConnectFourApp
                 {
                     gameStatus = GameStatusEnum.Tie;
                     lstbtn.ForEach(b => SetButtonBackColor(b));
+
+                    DisplayGameStatus();
+
                     return;
                 }
         }
         private void DetectWinnerorTie(List<Button> lstbtn)
         {
+            bool hasFourConsecutiveSameColor = false;
 
-            if (lstbtn.Count(b => b.BackColor == Color.Red || b.BackColor == Color.Blue) == 4)
+            for (int i = 0; i <= lstbtn.Count - 4; i++)
+            {
+                if (lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
+                    lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
+                    lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
+                {
+                    hasFourConsecutiveSameColor = true;
+                    break;
+                }
+            }
+
+            if (hasFourConsecutiveSameColor == true)
             {
                 gameStatus = GameStatusEnum.Winner;
-                lstbtn.ForEach(b => SetButtonBackColor(b));
+                tmr.Interval = 500;
+                tmr.Tick += Tmr_Tick;
+                tickCount = 0;
+                tmr.Start();
+
+                DisplayGameStatus();
+
                 return;
             }
+
             DetectTie();
+        }
+
+        private void Tmr_Tick(object? sender, EventArgs e)
+        {
+            tickCount++;
+            if (tickCount == 3)
+            {
+                tmr.Stop();
+            }
+            else
+            {
+                //will toggle the whole list! need to toggle just those four buttons.
+                winningSet.ForEach(b => b.Visible = !b.Visible);
+            }
         }
 
         private void SwitchTurns()
