@@ -145,9 +145,21 @@ namespace ConnectFourApp
             }
             else
             {
-                //will toggle the whole list! need to toggle just those four buttons.
-                winningSet.ForEach(b => b.Visible = !b.Visible);
-            }
+                //set the value of lstbtn to the lists within lstWinningSets
+                for (int i = 0; i <= lstbtn.Count - 4; i++)
+                {
+                    // Check if the current button and the next three have the same BackColor
+                    if (lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
+                        lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
+                        lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
+                    {
+                        // Toggle visibility of the four consecutive buttons
+                        lstbtn[i].Visible = !lstbtn[i].Visible;
+                        lstbtn[i + 1].Visible = !lstbtn[i + 1].Visible;
+                        lstbtn[i + 2].Visible = !lstbtn[i + 2].Visible;
+                        lstbtn[i + 3].Visible = !lstbtn[i + 3].Visible;
+                    }
+                }
         }
 
         private void SwitchTurns()
