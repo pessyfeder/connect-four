@@ -190,6 +190,18 @@ namespace ConnectFourApp
             DisplayGameStatus();
         }
 
+        private void DoComputerTurnRandom()
+        {
+            var lst = lstBtnColumnLists.SelectMany(lst => lst.Where(b => b.BackColor == Color.Transparent)).ToList();
+            var btn = lst[rnd.Next(0, lst.Count())];
+            DoTurn(btn);
+        }
+
+        private bool IsComputerTurn()
+        {
+            return currentTurn == TurnEnum.Red && gameStatus == GameStatusEnum.Playing && playAgainstComp == true;
+        }
+
         private void DisplayGameStatus()
         {
             string msg = "";
