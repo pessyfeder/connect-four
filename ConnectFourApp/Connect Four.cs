@@ -146,6 +146,8 @@ namespace ConnectFourApp
             else
             {
                 //set the value of lstbtn to the lists within lstWinningSets
+                var lstbtn = lstWinningSets.SelectMany(lst => lst).ToList();
+
                 for (int i = 0; i <= lstbtn.Count - 4; i++)
                 {
                     // Check if the current button and the next three have the same BackColor
@@ -160,6 +162,7 @@ namespace ConnectFourApp
                         lstbtn[i + 3].Visible = !lstbtn[i + 3].Visible;
                     }
                 }
+            }
         }
 
         private void SwitchTurns()
