@@ -108,26 +108,20 @@ namespace ConnectFourApp
         {
             foreach (Control c in tblSlots.Controls)
             {
-                if (c is Button b)
+                if (c is Button b && b.BackColor == Color.Transparent)
                 {
                     //exit method if any transparent button is found
-                    if (b.BackColor == Color.Transparent)
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        gameStatus = GameStatusEnum.Tie;
-                        DisplayGameStatus();
-                    }
+
+                    return;
                 }
+
+                gameStatus = GameStatusEnum.Tie;
+                DisplayGameStatus();
             }
         }
 
         private bool DetectWinnerorTie(List<Button> lstbtn)
         {
-            bool hasFourConsecutiveSameColor = false;
-
             for (int i = 0; i <= lstbtn.Count - 4; i++)
             {
                 if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
@@ -136,20 +130,17 @@ namespace ConnectFourApp
                     lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
                     lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
                 {
-                    hasFourConsecutiveSameColor = true;
-                    break;
+                    gameStatus = GameStatusEnum.Winner;
+                    EnableDisableControls();
+                    DisplayGameStatus();
+                    return true;
                 }
-            }
-
-            if (hasFourConsecutiveSameColor == true)
-            {
-                gameStatus = GameStatusEnum.Winner;
-                EnableDisableControls();
-                DisplayGameStatus();
-                return true;
-            }
-
-            DetectTie();
+                else
+                {
+                    DetectTie();
+                }
+            }      
+            
             return false;
         }
 
@@ -213,9 +204,11 @@ namespace ConnectFourApp
                     break;
                 case GameStatusEnum.Tie:
                     msg = "Tie!";
+                    btnStart.Text = "Click me to start game";
                     break;
                 case GameStatusEnum.Winner:
                     msg = "Winner is: " + currentTurn.ToString();
+                    btnStart.Text = "Click me to start game";
                     break;
             }
 
