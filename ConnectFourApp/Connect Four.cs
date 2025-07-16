@@ -226,9 +226,10 @@ namespace ConnectFourApp
                     b.BackColor = Color.Transparent;
                 }
             }
-            EnableDisableControls();
 
             gameStatus = GameStatusEnum.Playing;
+            EnableDisableControls();
+
 
             DisplayGameStatus();
         }
@@ -265,6 +266,10 @@ namespace ConnectFourApp
                 else if (lstBtnColumn6.Contains(clickedButton))
                 {
                     DoTurn(lstBtnColumn6);
+                }
+                else if (lstBtnColumn7.Contains(clickedButton))
+                {
+                    DoTurn(lstBtnColumn7);
                 }
             }
         }
