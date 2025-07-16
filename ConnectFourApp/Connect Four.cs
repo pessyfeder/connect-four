@@ -106,24 +106,31 @@ namespace ConnectFourApp
 
         private void DetectTie()
         {
-            foreach (List<Button> lstbtn in lstBtnColumnLists)
-                if (lstbtn.Where(b => b.BackColor == Color.Transparent).Count() == 0)
+            foreach (Control c in tblSlots.Controls)
+            {
+                if (c is Button b)
                 {
-                    gameStatus = GameStatusEnum.Tie;
-                    lstbtn.ForEach(b => SetButtonBackColor(b));
-
-                    DisplayGameStatus();
-
-                    return;
+                    //exit method if any transparent button is found
+                    if (b.BackColor == Color.Transparent)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        gameStatus = GameStatusEnum.Tie;
+                        DisplayGameStatus();
+                    }
                 }
+            }
         }
+
         private bool DetectWinnerorTie(List<Button> lstbtn)
         {
             bool hasFourConsecutiveSameColor = false;
 
             for (int i = 0; i <= lstbtn.Count - 4; i++)
             {
-                if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue) 
+                if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
                     &&
                     lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
                     lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
@@ -170,8 +177,9 @@ namespace ConnectFourApp
                     Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
                     SetButtonBackColor(b);
                     bool hasWinner = false;
-                    lstWinningSets.ForEach(lstBtn => {
-                        if (DetectWinnerorTie(lstBtn)) 
+                    lstWinningSets.ForEach(lstBtn =>
+                    {
+                        if (DetectWinnerorTie(lstBtn))
                         {
                             hasWinner = true;
                         }
@@ -194,7 +202,7 @@ namespace ConnectFourApp
         private void DisplayGameStatus()
         {
             string msg = "";
-            Font newfont = new("Comic Sans MS",  14, FontStyle.Bold);
+            Font newfont = new("Comic Sans MS", 14, FontStyle.Bold);
 
             switch (gameStatus)
             {
@@ -239,41 +247,17 @@ namespace ConnectFourApp
         }
         private void B_Click(object? sender, EventArgs e)
         {
-            if (sender is Button)
+            if (sender is Button clickedButton)
             {
-                Button clickedButton = (Button)sender;
-
-                if (lstBtnColumn1.Contains(clickedButton))
+                foreach (var columnButtons in lstBtnColumnLists)
                 {
-                    DoTurn(lstBtnColumn1);
-                }
-                else if (lstBtnColumn2.Contains(clickedButton))
-                {
-                    DoTurn(lstBtnColumn2);
-                }
-                else if (lstBtnColumn3.Contains(clickedButton))
-                {
-                    DoTurn(lstBtnColumn3);
-                }
-                else if (lstBtnColumn4.Contains(clickedButton))
-                {
-                    DoTurn(lstBtnColumn4);
-                }
-                else if (lstBtnColumn5.Contains(clickedButton))
-                {
-                    DoTurn(lstBtnColumn5);
-                }
-                else if (lstBtnColumn6.Contains(clickedButton))
-                {
-                    DoTurn(lstBtnColumn6);
-                }
-                else if (lstBtnColumn7.Contains(clickedButton))
-                {
-                    DoTurn(lstBtnColumn7);
+                    if (columnButtons.Contains(clickedButton))
+                    {
+                        DoTurn(columnButtons);
+                        break;
+                    }
                 }
             }
         }
-
-
     }
 }
