@@ -7,8 +7,6 @@ namespace ConnectFourApp
     public partial class frmConnectFour : Form
     {
         Random rnd = new();
-        System.Windows.Forms.Timer tmr = new();
-        int tickCount = 0;
 
         List<Button> lstBtnColumn1;
         List<Button> lstBtnColumn2;
@@ -16,6 +14,7 @@ namespace ConnectFourApp
         List<Button> lstBtnColumn4;
         List<Button> lstBtnColumn5;
         List<Button> lstBtnColumn6;
+        List<Button> lstBtnColumn7;
 
         List<List<Button>> lstBtnColumnLists;
         List<List<Button>> lstWinningSets;
@@ -37,8 +36,9 @@ namespace ConnectFourApp
             lstBtnColumn4 = new() { button19, button20, button21, button22, button23, button24 };
             lstBtnColumn5 = new() { button25, button26, button27, button28, button29, button30 };
             lstBtnColumn6 = new() { button31, button32, button33, button34, button35, button36 };
+            lstBtnColumn7 = new() { button37, button38, button39, button40, button41, button42 };
 
-            lstBtnColumnLists = new() { lstBtnColumn1, lstBtnColumn2, lstBtnColumn3, lstBtnColumn4, lstBtnColumn5, lstBtnColumn6 };
+            lstBtnColumnLists = new() { lstBtnColumn1, lstBtnColumn2, lstBtnColumn3, lstBtnColumn4, lstBtnColumn5, lstBtnColumn6, lstBtnColumn7 };
 
             lstWinningSets = new()
             {
@@ -80,6 +80,20 @@ namespace ConnectFourApp
             }
         }
 
+        private void EnableDisableControls()
+        {
+            if (gameStatus == GameStatusEnum.Playing)
+            {
+                opt2Player.Enabled = false;
+                optPlayAgainstComp.Enabled = false;
+            }
+            else
+            {
+                opt2Player.Enabled = true;
+                optPlayAgainstComp.Enabled = true;
+            }
+        }
+
         private void SetButtonBackColor(Button btn)
         {
             Color c = Color.Transparent;
@@ -89,8 +103,6 @@ namespace ConnectFourApp
             }
             btn.BackColor = c;
         }
-
-
 
         private void DetectTie()
         {
@@ -105,13 +117,15 @@ namespace ConnectFourApp
                     return;
                 }
         }
-        private void DetectWinnerorTie(List<Button> lstbtn)
+        private bool DetectWinnerorTie(List<Button> lstbtn)
         {
             bool hasFourConsecutiveSameColor = false;
 
             for (int i = 0; i <= lstbtn.Count - 4; i++)
             {
-                if (lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
+                if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue) 
+                    &&
+                    lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
                     lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
                     lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
                 {
@@ -123,51 +137,26 @@ namespace ConnectFourApp
             if (hasFourConsecutiveSameColor == true)
             {
                 gameStatus = GameStatusEnum.Winner;
-                tmr.Interval = 500;
-                tmr.Tick += Tmr_Tick;
-                tickCount = 0;
-                tmr.Start();
-
+                EnableDisableControls();
                 DisplayGameStatus();
-
-                return;
+                return true;
             }
 
             DetectTie();
-        }
-
-        private void Tmr_Tick(object? sender, EventArgs e)
-        {
-            tickCount++;
-            if (tickCount == 3)
-            {
-                tmr.Stop();
-            }
-            else
-            {
-                //set the value of lstbtn to the lists within lstWinningSets
-                var lstbtn = lstWinningSets.SelectMany(lst => lst).ToList();
-
-                for (int i = 0; i <= lstbtn.Count - 4; i++)
-                {
-                    // Check if the current button and the next three have the same BackColor
-                    if (lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
-                        lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
-                        lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
-                    {
-                        // Toggle visibility of the four consecutive buttons
-                        lstbtn[i].Visible = !lstbtn[i].Visible;
-                        lstbtn[i + 1].Visible = !lstbtn[i + 1].Visible;
-                        lstbtn[i + 2].Visible = !lstbtn[i + 2].Visible;
-                        lstbtn[i + 3].Visible = !lstbtn[i + 3].Visible;
-                    }
-                }
-            }
+            return false;
         }
 
         private void SwitchTurns()
         {
             currentTurn = currentTurn == TurnEnum.Red ? TurnEnum.Blue : TurnEnum.Red;
+            if (currentTurn == TurnEnum.Blue)
+            {
+                lblStatus.ForeColor = Color.Blue;
+            }
+            else
+            {
+                lblStatus.ForeColor = Color.Red;
+            }
         }
 
         private void DoTurn(List<Button> lstbtn)
@@ -180,8 +169,18 @@ namespace ConnectFourApp
                     //put that color onto the lowest available button in the column
                     Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
                     SetButtonBackColor(b);
-                    lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
-                    SwitchTurns();
+                    bool hasWinner = false;
+                    lstWinningSets.ForEach(lstBtn => {
+                        if (DetectWinnerorTie(lstBtn)) 
+                        {
+                            hasWinner = true;
+                        }
+                    });
+                    // Only switch turns if there's no winner
+                    if (!hasWinner)
+                    {
+                        SwitchTurns();
+                    }
                 }
                 else
                 {
@@ -192,15 +191,17 @@ namespace ConnectFourApp
             DisplayGameStatus();
         }
 
-        //Display game status on start button
         private void DisplayGameStatus()
         {
-            string msg = "Click 'Start' to start game";
+            string msg = "";
+            Font newfont = new("Comic Sans MS",  14, FontStyle.Bold);
 
             switch (gameStatus)
             {
                 case GameStatusEnum.Playing:
                     msg = "Current turn: " + currentTurn.ToString();
+                    btnStart.Text = "Click me to restart game";
+                    btnStart.Font = newfont;
                     break;
                 case GameStatusEnum.Tie:
                     msg = "Tie!";
@@ -212,7 +213,7 @@ namespace ConnectFourApp
 
             msg = playAgainstComp ? optPlayAgainstComp.Text + " - " + msg : opt2Player.Text + " - " + msg;
 
-            btnStart.Text = msg;
+            lblStatus.Text = msg;
         }
 
         private void StartGame()
@@ -225,9 +226,7 @@ namespace ConnectFourApp
                     b.BackColor = Color.Transparent;
                 }
             }
-
-            opt2Player.Enabled = false;
-            optPlayAgainstComp.Enabled = false;
+            EnableDisableControls();
 
             gameStatus = GameStatusEnum.Playing;
 

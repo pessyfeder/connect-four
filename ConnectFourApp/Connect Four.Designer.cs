@@ -30,10 +30,11 @@
         {
             tblMain = new TableLayoutPanel();
             tblControls = new TableLayoutPanel();
-            btnStart = new Button();
             flwPlayerOptions = new FlowLayoutPanel();
             optPlayAgainstComp = new RadioButton();
             opt2Player = new RadioButton();
+            btnStart = new Button();
+            lblStatus = new Label();
             tblSlots = new TableLayoutPanel();
             button8 = new Button();
             button1 = new Button();
@@ -102,29 +103,19 @@
             // tblControls
             // 
             tblControls.Anchor = AnchorStyles.None;
-            tblControls.ColumnCount = 2;
-            tblControls.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tblControls.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tblControls.Controls.Add(btnStart, 0, 0);
-            tblControls.Controls.Add(flwPlayerOptions, 1, 0);
+            tblControls.ColumnCount = 3;
+            tblControls.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tblControls.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tblControls.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tblControls.Controls.Add(flwPlayerOptions, 2, 0);
+            tblControls.Controls.Add(btnStart, 1, 0);
+            tblControls.Controls.Add(lblStatus, 0, 0);
             tblControls.Location = new Point(3, 3);
             tblControls.Name = "tblControls";
             tblControls.RowCount = 1;
-            tblControls.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tblControls.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tblControls.Size = new Size(1149, 93);
             tblControls.TabIndex = 0;
-            // 
-            // btnStart
-            // 
-            btnStart.Dock = DockStyle.Fill;
-            btnStart.Font = new Font("Comic Sans MS", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnStart.ForeColor = SystemColors.HotTrack;
-            btnStart.Location = new Point(3, 3);
-            btnStart.Name = "btnStart";
-            btnStart.Size = new Size(568, 87);
-            btnStart.TabIndex = 0;
-            btnStart.Text = "Click Me to Start Game";
-            btnStart.UseVisualStyleBackColor = true;
             // 
             // flwPlayerOptions
             // 
@@ -132,9 +123,9 @@
             flwPlayerOptions.AutoSize = true;
             flwPlayerOptions.Controls.Add(optPlayAgainstComp);
             flwPlayerOptions.Controls.Add(opt2Player);
-            flwPlayerOptions.Location = new Point(577, 26);
+            flwPlayerOptions.Location = new Point(769, 5);
             flwPlayerOptions.Name = "flwPlayerOptions";
-            flwPlayerOptions.Size = new Size(569, 41);
+            flwPlayerOptions.Size = new Size(377, 82);
             flwPlayerOptions.TabIndex = 0;
             // 
             // optPlayAgainstComp
@@ -157,13 +148,36 @@
             opt2Player.Checked = true;
             opt2Player.Dock = DockStyle.Fill;
             opt2Player.Font = new Font("Comic Sans MS", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            opt2Player.Location = new Point(325, 3);
+            opt2Player.Location = new Point(3, 44);
             opt2Player.Name = "opt2Player";
             opt2Player.Size = new Size(133, 35);
             opt2Player.TabIndex = 0;
             opt2Player.TabStop = true;
             opt2Player.Text = "2 Players";
             opt2Player.UseVisualStyleBackColor = true;
+            // 
+            // btnStart
+            // 
+            btnStart.Font = new Font("Comic Sans MS", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnStart.ForeColor = SystemColors.HotTrack;
+            btnStart.Location = new Point(386, 3);
+            btnStart.Name = "btnStart";
+            btnStart.Size = new Size(377, 87);
+            btnStart.TabIndex = 0;
+            btnStart.Text = "Click Me to Start Game";
+            btnStart.UseVisualStyleBackColor = true;
+            // 
+            // lblStatus
+            // 
+            lblStatus.AutoSize = true;
+            lblStatus.Dock = DockStyle.Fill;
+            lblStatus.Font = new Font("Comic Sans MS", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStatus.ForeColor = Color.Red;
+            lblStatus.Location = new Point(3, 0);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(377, 93);
+            lblStatus.TabIndex = 1;
+            lblStatus.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tblSlots
             // 
@@ -805,5 +819,6 @@
         private Button button40;
         private Button button41;
         private Button button42;
+        private Label lblStatus;
     }
 }
