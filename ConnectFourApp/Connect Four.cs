@@ -269,7 +269,7 @@ namespace ConnectFourApp
             else if (lstHasTwoConsecAndOneNone != null)
             {
                 DoTurn(lstHasTwoConsecAndOneNone);
-            }
+            } 
         }
         private bool HasTwoConsecAndOneNone(List<Button> lstbtn)
         {
