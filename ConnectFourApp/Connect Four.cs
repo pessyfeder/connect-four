@@ -216,21 +216,18 @@ namespace ConnectFourApp
                 if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
                 {
                     Button b = new();
-                    if (IsComputerTurn())
-                    {
-                        if (lstHasThreeConsec.Any(b => b.BackColor == Color.Transparent))
+                        if (IsComputerTurn() && lstHasThreeConsec.Any(b => b.BackColor == Color.Transparent))
                         {
                             // Get the first (lowest index) transparent button in the lstHasThreeConsec
                             b = lstHasThreeConsec.First(btn => btn.BackColor == Color.Transparent);
                             //b = SHOULD BE the first (lowest index) CONSECUTIVE transparent button in that list
                             //maybe copy logic from HasTwoConecAndOneNone() method
                         }
-                    }
-                    else if (lstHasTwoConsecAndOneNone.Any(b => b.BackColor == Color.Transparent))
-                    {
-                        //b = SHOULD BE the transparent button identified
-                        b = lstHasTwoConsecAndOneNone.First(b => b.BackColor == Color.Transparent);
-                    }
+                        else if (IsComputerTurn() && lstHasTwoConsecAndOneNone.Any(b => b.BackColor == Color.Transparent))
+                        {
+                            //b = SHOULD BE the transparent button identified
+                            b = lstHasTwoConsecAndOneNone.First(b => b.BackColor == Color.Transparent);
+                        }
                     else
                     {
                         //button is the lowest available button in the column
@@ -384,7 +381,10 @@ namespace ConnectFourApp
         }
         private void L_CheckedChanged(object? sender, EventArgs e)
         {
-            StartGame();
+            if (gameStatus == GameStatusEnum.Playing)
+            {
+                StartGame();
+            }
         }
         private void B_Click(object? sender, EventArgs e)
         {
