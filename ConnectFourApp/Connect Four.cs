@@ -305,8 +305,8 @@ namespace ConnectFourApp
                     lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
                     lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
                     // Check if the button before or after this list is transparent
-                    (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ||
-                    (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent))
+                    ((i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ||
+                    (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent)))
                 {
                     return true;
                 }
