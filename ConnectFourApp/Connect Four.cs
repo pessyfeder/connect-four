@@ -19,6 +19,8 @@ namespace ConnectFourApp
         List<List<Button>> lstBtnColumnLists;
         List<List<Button>> lstWinningSets;
 
+        List<RadioButton> lstOpt;
+
         bool playAgainstComp = false;
         private enum TurnEnum { Red, Blue };
         TurnEnum currentTurn = TurnEnum.Red;
@@ -69,6 +71,10 @@ namespace ConnectFourApp
                 new() { button4, button9, button14, button19 }
             };
 
+            lstOpt = new() { opt2Player, optPlayAgainstComp };
+
+            lstOpt.ForEach(l => l.CheckedChanged += L_CheckedChanged);
+
             btnStart.Click += BtnStart_Click;
 
             foreach (Control c in tblSlots.Controls)
@@ -77,24 +83,46 @@ namespace ConnectFourApp
                 {
                     b.Click += B_Click;
                 }
-            }
-
-
+            }            
         }
 
-
-        private void EnableDisableControls()
+        private void StartGame()
         {
-            if (gameStatus == GameStatusEnum.Playing)
+            foreach (Control c in tblSlots.Controls)
             {
-                opt2Player.Enabled = false;
-                optPlayAgainstComp.Enabled = false;
+                if (c is Button b)
+                {
+                    b.Enabled = true;
+                    b.BackColor = Color.Transparent;
+                }
             }
-            else
+
+            playAgainstComp = optPlayAgainstComp.Checked;
+
+            if (gameStatus == GameStatusEnum.NotStarted)
             {
-                opt2Player.Enabled = true;
-                optPlayAgainstComp.Enabled = true;
+                DisableControls();
             }
+            else if (gameStatus == GameStatusEnum.Playing)
+            {
+                EnableControls();
+            }
+
+            gameStatus = GameStatusEnum.Playing;
+
+            DisplayGameStatus();
+        }
+
+        private void EnableControls()
+        {
+            opt2Player.Enabled = true;
+            optPlayAgainstComp.Enabled = true;
+        }
+
+        private void DisableControls()
+        {
+            opt2Player.Enabled = false;
+            optPlayAgainstComp.Enabled = false;
         }
 
         private void SetButtonBackColor(Button btn)
@@ -144,7 +172,7 @@ namespace ConnectFourApp
             if (IsWinner(lstbtn))
             {
                 gameStatus = GameStatusEnum.Winner;
-                EnableDisableControls();
+                EnableControls();
                 DisplayGameStatus();
             }
 
@@ -215,7 +243,7 @@ namespace ConnectFourApp
             var lstHasThreeConsec = lstWinningSets.FirstOrDefault(l => HasThreeConsecTiles(l));
             var lstHasTwoConsecAndOneNone = lstWinningSets.FirstOrDefault(l => HasTwoConsecAndOneNone(l));
 
-            if (lstHasThreeConsec != null )
+            if (lstHasThreeConsec != null)
             {
                 // will take the last tile in the row! Need it to take the "missing" one.
                 // kept adding tiles to the last available slot in that row :)
@@ -274,22 +302,23 @@ namespace ConnectFourApp
         private void DisplayGameStatus()
         {
             string msg = "";
+            string restartText = "Click me to restart game";
             Font newfont = new("Comic Sans MS", 14, FontStyle.Bold);
 
             switch (gameStatus)
             {
                 case GameStatusEnum.Playing:
                     msg = "Current turn: " + currentTurn.ToString();
-                    btnStart.Text = "Click me to restart game";
+                    btnStart.Text = restartText;
                     btnStart.Font = newfont;
                     break;
                 case GameStatusEnum.Tie:
                     msg = "Tie!";
-                    btnStart.Text = "Click me to start game";
+                    btnStart.Text = restartText;
                     break;
                 case GameStatusEnum.Winner:
                     msg = "Winner is: " + currentTurn.ToString();
-                    btnStart.Text = "Click me to start game";
+                    btnStart.Text = restartText;
                     break;
             }
 
@@ -297,25 +326,11 @@ namespace ConnectFourApp
 
             lblStatus.Text = msg;
         }
-
-        private void StartGame()
-        {
-            foreach (Control c in tblSlots.Controls)
-            {
-                if (c is Button b)
-                {
-                    b.Enabled = true;
-                    b.BackColor = Color.Transparent;
-                }
-            }
-
-            playAgainstComp = optPlayAgainstComp.Checked;
-            gameStatus = GameStatusEnum.Playing;
-
-            EnableDisableControls();
-            DisplayGameStatus();
-        }
         private void BtnStart_Click(object? sender, EventArgs e)
+        {
+            StartGame();
+        }
+        private void L_CheckedChanged(object? sender, EventArgs e)
         {
             StartGame();
         }
