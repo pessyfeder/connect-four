@@ -19,6 +19,9 @@ namespace ConnectFourApp
         List<List<Button>> lstBtnColumnLists;
         List<List<Button>> lstWinningSets;
 
+        List<Button> lstHasThreeConsec;
+        List<Button> lstHasTwoConsecAndOneNone;
+
         List<RadioButton> lstOpt;
 
         bool playAgainstComp = false;
@@ -71,6 +74,9 @@ namespace ConnectFourApp
                 new() { button4, button9, button14, button19 }
             };
 
+            lstHasThreeConsec = lstWinningSets.FirstOrDefault(l => HasThreeConsecTiles(l));
+            lstHasTwoConsecAndOneNone = lstWinningSets.FirstOrDefault(l => HasTwoConsecAndOneNone(l));
+
             lstOpt = new() { opt2Player, optPlayAgainstComp };
 
             lstOpt.ForEach(l => l.CheckedChanged += L_CheckedChanged);
@@ -83,7 +89,7 @@ namespace ConnectFourApp
                 {
                     b.Click += B_Click;
                 }
-            }            
+            }
         }
 
         private void StartGame()
@@ -98,6 +104,7 @@ namespace ConnectFourApp
             }
 
             playAgainstComp = optPlayAgainstComp.Checked;
+            currentTurn = TurnEnum.Red;
 
             if (gameStatus == GameStatusEnum.NotStarted)
             {
@@ -201,10 +208,23 @@ namespace ConnectFourApp
         {
             if (gameStatus == GameStatusEnum.Playing)
             {
+                DisableControls();
+
                 if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
                 {
-                    //put that color onto the lowest available button in the column
-                    Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
+                    Button b = new();
+                    if (IsComputerTurn() && (lstHasThreeConsec != null || lstHasTwoConsecAndOneNone != null))
+                    {
+                        //b = the first (lowest index) transparent button in that list
+                        b = lstWinningSets.First
+                        //check logic to make sure it makes sense
+                    }
+                    else
+                    {
+                        //button is the lowest available button in the column
+                        b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
+                    }
+                    //put the current turn's color on that button
                     SetButtonBackColor(b);
 
                     lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
@@ -240,13 +260,9 @@ namespace ConnectFourApp
 
         private void DoComputerTurnOffenseDefense()
         {
-            var lstHasThreeConsec = lstWinningSets.FirstOrDefault(l => HasThreeConsecTiles(l));
-            var lstHasTwoConsecAndOneNone = lstWinningSets.FirstOrDefault(l => HasTwoConsecAndOneNone(l));
-
             if (lstHasThreeConsec != null)
             {
-                // will take the last tile in the row! Need it to take the "missing" one.
-                // kept adding tiles to the last available slot in that row :)
+                // Modify DoTurn to accept the specific button to color if needed
 
                 DoTurn(lstHasThreeConsec);
             }
@@ -254,6 +270,40 @@ namespace ConnectFourApp
             {
                 DoTurn(lstHasTwoConsecAndOneNone);
             }
+        }
+        private bool HasTwoConsecAndOneNone(List<Button> lstbtn)
+        {
+            for (int i = 0; i <= lstbtn.Count - 4; i++)
+            {
+                if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
+                    &&
+                    lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
+                    lstbtn[i].BackColor == Color.Transparent &&
+                    lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //returns true if there are three consecutive tiles and one transparent
+        private bool HasThreeConsecTiles(List<Button> lstbtn)
+        {
+            for (int i = 0; i <= lstbtn.Count - 4; i++)
+            {
+                if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
+                    &&
+                    lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
+                    lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
+                    // Check if the button before or after this list is transparent
+                    (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ||
+                    (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void DoComputerTurnRandom()
@@ -267,38 +317,6 @@ namespace ConnectFourApp
             return currentTurn == TurnEnum.Blue && gameStatus == GameStatusEnum.Playing && playAgainstComp == true;
         }
 
-        private bool HasTwoConsecAndOneNone(List<Button> lstbtn)
-        {
-            for (int i = 0; i <= lstbtn.Count - 4; i++)
-            {
-                if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
-                    &&
-                    lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
-                    lstbtn[i].BackColor != lstbtn[i + 2].BackColor &&
-                    lstbtn[i].BackColor != lstbtn[i + 3].BackColor)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        //returns true if there are three consecutive tiles
-        private bool HasThreeConsecTiles(List<Button> lstbtn)
-        {
-            for (int i = 0; i <= lstbtn.Count - 3; i++)
-            {
-                if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
-                    &&
-                    lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
-                    lstbtn[i].BackColor == lstbtn[i + 2].BackColor)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
         private void DisplayGameStatus()
         {
             string msg = "";
