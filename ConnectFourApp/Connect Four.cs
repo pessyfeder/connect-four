@@ -71,7 +71,7 @@ namespace ConnectFourApp
                 new() { button18, button23, button28, button33, button38 },
                 new() { button12, button17, button22, button27, button32, button37 },
                 new() { button6, button11, button16, button21, button26, button31 },
-                new() { button5, button10, button15, button20, button20, button25 },
+                new() { button5, button10, button15, button20, button25 },
                 new() { button4, button9, button14, button19 }
             };
 
@@ -118,7 +118,21 @@ namespace ConnectFourApp
 
             gameStatus = GameStatusEnum.Playing;
 
+            SetLblStatusForecolor();
             DisplayGameStatus();
+        }
+
+        private void SetLblStatusForecolor()
+        {
+            if (currentTurn == TurnEnum.Blue)
+            {
+                lblStatus.ForeColor = Color.Blue;
+            }
+
+            else
+            {
+                lblStatus.ForeColor = Color.Red;
+            }
         }
 
         private void EnableControls()
@@ -194,17 +208,8 @@ namespace ConnectFourApp
         private void SwitchTurns()
         {
             currentTurn = currentTurn == TurnEnum.Red ? TurnEnum.Blue : TurnEnum.Red;
-            if (currentTurn == TurnEnum.Blue)
-            {
-                lblStatus.ForeColor = Color.Blue;
-            }
-
-            else
-            {
-                lblStatus.ForeColor = Color.Red;
-            }
+            SetLblStatusForecolor();
         }
-
         private void DoTurn(List<Button> lstbtn)
         {
             if (gameStatus == GameStatusEnum.Playing)
@@ -221,7 +226,6 @@ namespace ConnectFourApp
                     }
                     else if (IsComputerTurn() && lstHasTwoConsecAndOneNone != null)
                     {
-                        //if they're both true, b will switch to this value. Is that a problem?
                         //b = the first (lowest index) transparent button in that list
                         b = lstHasTwoConsecAndOneNone.First(b => b.BackColor == Color.Transparent);
                     }
@@ -268,8 +272,6 @@ namespace ConnectFourApp
         {
             if (lstHasThreeConsec != null)
             {
-                // Modify DoTurn to accept the specific button to color if needed
-
                 DoTurn(lstHasThreeConsec);
             }
             else if (lstHasTwoConsecAndOneNone != null)
