@@ -78,7 +78,10 @@ namespace ConnectFourApp
                     b.Click += B_Click;
                 }
             }
+
+
         }
+
 
         private void EnableDisableControls()
         {
@@ -120,7 +123,7 @@ namespace ConnectFourApp
             }
         }
 
-        private bool DetectWinnerorTie(List<Button> lstbtn)
+        private bool IsWinner(List<Button> lstbtn)
         {
             for (int i = 0; i <= lstbtn.Count - 4; i++)
             {
@@ -130,18 +133,26 @@ namespace ConnectFourApp
                     lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
                     lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
                 {
-                    gameStatus = GameStatusEnum.Winner;
-                    EnableDisableControls();
-                    DisplayGameStatus();
                     return true;
                 }
-                else
-                {
-                    DetectTie();
-                }
-            }      
-            
+            }
             return false;
+        }
+
+        private void DetectWinnerorTie(List<Button> lstbtn)
+        {
+            if (IsWinner(lstbtn))
+            {
+                gameStatus = GameStatusEnum.Winner;
+                EnableDisableControls();
+                DisplayGameStatus();
+            }
+
+            else
+            {
+                DetectTie();
+            }
+
         }
 
         private void SwitchTurns()
@@ -159,7 +170,6 @@ namespace ConnectFourApp
 
         private void DoTurn(List<Button> lstbtn)
         {
-            //first switch turns
             if (gameStatus == GameStatusEnum.Playing)
             {
                 if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
@@ -167,20 +177,24 @@ namespace ConnectFourApp
                     //put that color onto the lowest available button in the column
                     Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
                     SetButtonBackColor(b);
-                    bool hasWinner = false;
+
+                    lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
+
                     lstWinningSets.ForEach(lstBtn =>
                     {
-                        if (DetectWinnerorTie(lstBtn))
+                        // Only switch turns if there's no winner
+                        if (!IsWinner(lstBtn))
                         {
-                            hasWinner = true;
+                            SwitchTurns();
                         }
                     });
-                    // Only switch turns if there's no winner
-                    if (!hasWinner)
+
+                    if (IsComputerTurn())
                     {
-                        SwitchTurns();
+                        DoComputerTurnRandom();
                     }
                 }
+
                 else
                 {
                     MessageBox.Show("Slot is unavailable. Please select another slot.");
@@ -192,14 +206,13 @@ namespace ConnectFourApp
 
         private void DoComputerTurnRandom()
         {
-            var lst = lstBtnColumnLists.SelectMany(lst => lst.Where(b => b.BackColor == Color.Transparent)).ToList();
-            var btn = lst[rnd.Next(0, lst.Count())];
-            DoTurn(btn);
+            var randomList = lstBtnColumnLists[rnd.Next(0, lstBtnColumnLists.Count())].Where(b => b.BackColor == Color.Transparent).ToList();
+            DoTurn(randomList);
         }
 
         private bool IsComputerTurn()
         {
-            return currentTurn == TurnEnum.Red && gameStatus == GameStatusEnum.Playing && playAgainstComp == true;
+            return currentTurn == TurnEnum.Blue && gameStatus == GameStatusEnum.Playing && playAgainstComp == true;
         }
 
         private void DisplayGameStatus()
@@ -240,10 +253,10 @@ namespace ConnectFourApp
                 }
             }
 
+            playAgainstComp = optPlayAgainstComp.Checked;
             gameStatus = GameStatusEnum.Playing;
+
             EnableDisableControls();
-
-
             DisplayGameStatus();
         }
         private void BtnStart_Click(object? sender, EventArgs e)
