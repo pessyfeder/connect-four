@@ -216,18 +216,32 @@ namespace ConnectFourApp
                 if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
                 {
                     Button b = new();
-                        if (IsComputerTurn() && lstHasThreeConsec.Any(b => b.BackColor == Color.Transparent))
+                    if (IsComputerTurn() && lstHasThreeConsec.Any(b => b.BackColor == Color.Transparent))
+                    {
+                        for (int i = 0; i < lstHasThreeConsec.Count; i++)
                         {
-                            // Get the first (lowest index) transparent button in the lstHasThreeConsec
-                            b = lstHasThreeConsec.First(btn => btn.BackColor == Color.Transparent);
-                            //b = SHOULD BE the first (lowest index) CONSECUTIVE transparent button in that list
-                            //maybe copy logic from HasTwoConecAndOneNone() method
+                            if (lstHasThreeConsec[i].BackColor == Color.Transparent)
+                            {
+                                // Check if it's before the three consecutive
+                                if (i > 0 && lstHasThreeConsec[i - 1].BackColor == Color.Transparent)
+                                {
+                                    b = lstHasThreeConsec[i - 1];
+                                    break;
+                                }
+                                // Check if it's after the three consecutive
+                                if (i < lstHasThreeConsec.Count - 1 && lstHasThreeConsec[i + 1].BackColor == Color.Transparent)
+                                {
+                                    b = lstHasThreeConsec[i + 1];
+                                    break;
+                                }
+                            }
                         }
-                        else if (IsComputerTurn() && lstHasTwoConsecAndOneNone.Any(b => b.BackColor == Color.Transparent))
-                        {
-                            //b = SHOULD BE the transparent button identified
-                            b = lstHasTwoConsecAndOneNone.First(b => b.BackColor == Color.Transparent);
-                        }
+                    }
+                    else if (IsComputerTurn() && lstHasTwoConsecAndOneNone.Any(b => b.BackColor == Color.Transparent))
+                    {
+                        //b = SHOULD BE the transparent button identified
+                        b = lstHasTwoConsecAndOneNone.First(b => b.BackColor == Color.Transparent);
+                    }
                     else
                     {
                         //button is the lowest available button in the column
