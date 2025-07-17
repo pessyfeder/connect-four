@@ -75,9 +75,6 @@ namespace ConnectFourApp
                 new() { button4, button9, button14, button19 }
             };
 
-            lstHasThreeConsec = lstWinningSets.FirstOrDefault(l => HasThreeConsecTiles(l));
-            lstHasTwoConsecAndOneNone = lstWinningSets.FirstOrDefault(l => HasTwoConsecAndOneNone(l));
-
             lstOpt = new() { opt2Player, optPlayAgainstComp };
 
             lstOpt.ForEach(l => l.CheckedChanged += L_CheckedChanged);
@@ -219,14 +216,19 @@ namespace ConnectFourApp
                 if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
                 {
                     Button b = new();
-                    if (IsComputerTurn() && lstHasThreeConsec != null)
+                    if (IsComputerTurn())
                     {
-                        //b = the first (lowest index) transparent button in that list
-                        b = lstHasThreeConsec.First(b => b.BackColor == Color.Transparent);
+                        if (lstHasThreeConsec.Any(b => b.BackColor == Color.Transparent))
+                        {
+                            // Get the first (lowest index) transparent button in the lstHasThreeConsec
+                            b = lstHasThreeConsec.First(btn => btn.BackColor == Color.Transparent);
+                            //b = SHOULD BE the first (lowest index) CONSECUTIVE transparent button in that list
+                            //maybe copy logic from HasTwoConecAndOneNone() method
+                        }
                     }
-                    else if (IsComputerTurn() && lstHasTwoConsecAndOneNone != null)
+                    else if (lstHasTwoConsecAndOneNone.Any(b => b.BackColor == Color.Transparent))
                     {
-                        //b = the first (lowest index) transparent button in that list
+                        //b = SHOULD BE the transparent button identified
                         b = lstHasTwoConsecAndOneNone.First(b => b.BackColor == Color.Transparent);
                     }
                     else
@@ -270,14 +272,38 @@ namespace ConnectFourApp
 
         private void DoComputerTurnOffenseDefense()
         {
-            if (lstHasThreeConsec != null)
+            // Clear previous lists to ensure fresh search
+            lstHasThreeConsec = new List<Button>();
+            lstHasTwoConsecAndOneNone = new List<Button>();
+
+            // Search for all sets of three consecutive buttons
+            foreach (var winningSet in lstWinningSets)
             {
+                if (HasThreeConsecTiles(winningSet))
+                {
+                    lstHasThreeConsec.AddRange(winningSet); // Add all buttons in this set
+                }
+                else if (HasTwoConsecAndOneNone(winningSet))
+                {
+                    lstHasTwoConsecAndOneNone.AddRange(winningSet); // Add all buttons in this set
+                }
+            }
+
+            if (lstHasThreeConsec.Any())
+            {
+                MessageBox.Show("Computer will block/complete with three consecutive tiles.");
                 DoTurn(lstHasThreeConsec);
             }
-            else if (lstHasTwoConsecAndOneNone != null)
+            else if (lstHasTwoConsecAndOneNone.Any())
             {
+                MessageBox.Show("Computer will block with two consecutive tiles and one empty.");
                 DoTurn(lstHasTwoConsecAndOneNone);
-            } 
+            }
+            else
+            {
+                MessageBox.Show("No offensive/defensive move available, return.");
+                return;
+            }
         }
         private bool HasTwoConsecAndOneNone(List<Button> lstbtn)
         {
