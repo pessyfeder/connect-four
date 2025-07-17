@@ -162,6 +162,7 @@ namespace ConnectFourApp
             {
                 lblStatus.ForeColor = Color.Blue;
             }
+
             else
             {
                 lblStatus.ForeColor = Color.Red;
@@ -191,7 +192,12 @@ namespace ConnectFourApp
 
                     if (IsComputerTurn())
                     {
-                        DoComputerTurnRandom();
+                        DoComputerTurnOffenseDefense();
+
+                        if (IsComputerTurn())
+                        {
+                            DoComputerTurnRandom();
+                        }
                     }
                 }
 
@@ -202,6 +208,24 @@ namespace ConnectFourApp
             }
 
             DisplayGameStatus();
+        }
+
+        private void DoComputerTurnOffenseDefense()
+        {
+            var lstHasThreeConsec = lstWinningSets.FirstOrDefault(l => HasThreeConsecTiles(l));
+            var lstHasTwoConsecAndOneNone = lstWinningSets.FirstOrDefault(l => HasTwoConsecAndOneNone(l));
+
+            if (lstHasThreeConsec != null )
+            {
+                // will take the last tile in the row! Need it to take the "missing" one.
+                // kept adding tiles to the last available slot in that row :)
+
+                DoTurn(lstHasThreeConsec);
+            }
+            else if (lstHasTwoConsecAndOneNone != null)
+            {
+                DoTurn(lstHasTwoConsecAndOneNone);
+            }
         }
 
         private void DoComputerTurnRandom()
@@ -215,6 +239,38 @@ namespace ConnectFourApp
             return currentTurn == TurnEnum.Blue && gameStatus == GameStatusEnum.Playing && playAgainstComp == true;
         }
 
+        private bool HasTwoConsecAndOneNone(List<Button> lstbtn)
+        {
+            for (int i = 0; i <= lstbtn.Count - 4; i++)
+            {
+                if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
+                    &&
+                    lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
+                    lstbtn[i].BackColor != lstbtn[i + 2].BackColor &&
+                    lstbtn[i].BackColor != lstbtn[i + 3].BackColor)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //returns true if there are three consecutive tiles
+        private bool HasThreeConsecTiles(List<Button> lstbtn)
+        {
+            for (int i = 0; i <= lstbtn.Count - 3; i++)
+            {
+                if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
+                    &&
+                    lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
+                    lstbtn[i].BackColor == lstbtn[i + 2].BackColor)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         private void DisplayGameStatus()
         {
             string msg = "";
