@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -213,11 +214,16 @@ namespace ConnectFourApp
                 if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
                 {
                     Button b = new();
-                    if (IsComputerTurn() && (lstHasThreeConsec != null || lstHasTwoConsecAndOneNone != null))
+                    if (IsComputerTurn() && lstHasThreeConsec != null)
                     {
                         //b = the first (lowest index) transparent button in that list
-                        b = lstWinningSets.First
-                        //check logic to make sure it makes sense
+                        b = lstHasThreeConsec.First(b => b.BackColor == Color.Transparent);
+                    }
+                    else if (IsComputerTurn() && lstHasTwoConsecAndOneNone != null)
+                    {
+                        //if they're both true, b will switch to this value. Is that a problem?
+                        //b = the first (lowest index) transparent button in that list
+                        b = lstHasTwoConsecAndOneNone.First(b => b.BackColor == Color.Transparent);
                     }
                     else
                     {
