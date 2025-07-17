@@ -216,13 +216,14 @@ namespace ConnectFourApp
                 if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
                 {
                     Button b = new();
-                    if (IsComputerTurn() && lstHasThreeConsec.Any(b => b.BackColor == Color.Transparent))
+                    if (IsComputerTurn() && lstHasThreeConsec(b => b.Count == 3))
                     {
                         for (int i = 0; i < lstHasThreeConsec.Count; i++)
                         {
                             if (lstHasThreeConsec[i].BackColor == Color.Transparent)
                             {
                                 // Check if it's before the three consecutive
+                                //this is not working
                                 if (i > 0 && lstHasThreeConsec[i - 1].BackColor == Color.Transparent)
                                 {
                                     b = lstHasThreeConsec[i - 1];
