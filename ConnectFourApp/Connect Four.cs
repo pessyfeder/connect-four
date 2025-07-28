@@ -210,10 +210,22 @@ namespace ConnectFourApp
         {
             if (gameStatus == GameStatusEnum.Playing)
             {
-                DisableControls();
+                DisableControls();               
 
                 if (HasAvailableButtons(lstbtn))
-                { 
+                {
+                    b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
+                    SetButtonBackColor(b);
+
+                    lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
+
+                    lstWinningSets.ForEach(lstBtn =>
+                    {
+                        if (!IsWinner(lstBtn))
+                        {
+                            SwitchTurns();
+                        }
+                    });
 
                     if (IsComputerTurn())
                     {
@@ -223,29 +235,12 @@ namespace ConnectFourApp
                     {
                         DoComputerTurnRandom();
                     }
-                    else
-                    {
-                        //button is the lowest available button in the column
-                        b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
-                        SetButtonBackColor(b);
-                    }
                 }
                 //in each event, SetButtonBackColor(b); the value of b just changes. How do I do that?
                 else
                 {
                     MessageBox.Show("Slot is unavailable. Please select another slot.");
                 }
-
-                lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
-
-                lstWinningSets.ForEach(lstBtn =>
-                {
-                    // Only switch turns if there's no winner
-                    if (!IsWinner(lstBtn))
-                    {
-                        SwitchTurns();
-                    }
-                });
             }
 
             DisplayGameStatus();
@@ -253,12 +248,12 @@ namespace ConnectFourApp
 
         private void DoComputerTurnOffenseDefense()
         {
-            if (IsComputerTurn() && lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out lstHasThreeConsec, out b)))
+            if (lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out lstHasThreeConsec, out b)))
             {
                 MessageBox.Show("Computer will block/complete with three consecutive tiles.");
                 SetButtonBackColor(b);
             }
-            else if (IsComputerTurn() && lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out lstHasThreeConsec, out b)))
+            else if (lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out lstHasThreeConsec, out b)))
             {
                 MessageBox.Show("Computer will block/complete with two consecutive tiles and one empty.");
                 SetButtonBackColor(b);
@@ -271,8 +266,8 @@ namespace ConnectFourApp
         }
         private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out List<Button> lstHasTwoConsecAndOneNone, out Button b)
         {
-            lstHasTwoConsecAndOneNone = new List<Button>();
-            b = new Button();
+            lstHasTwoConsecAndOneNone = new();
+            b = null;
 
             if (lstbtn.Count >= 4)
             {
@@ -287,9 +282,23 @@ namespace ConnectFourApp
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i]);
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i + 1]);
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i + 3]);
-                        //will only detect transparent button if it's the third in row. 
-                        //need to also check if it's the second in row, followed by two colored ones.
+
                         b = lstbtn[i + 2];
+
+                        return true;
+                    }
+                    else if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
+                        &&
+                        lstbtn[i + 1].BackColor == Color.Transparent &&
+                        lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
+                        lstbtn[i + 3].BackColor == lstbtn[i].BackColor)
+                    {
+                        lstHasTwoConsecAndOneNone.Add(lstbtn[i]);
+                        lstHasTwoConsecAndOneNone.Add(lstbtn[i + 2]);
+                        lstHasTwoConsecAndOneNone.Add(lstbtn[i + 3]);
+
+                        b = lstbtn[i + 1];
+
                         return true;
                     }
                 }
@@ -297,11 +306,10 @@ namespace ConnectFourApp
             return false;
         }
 
-        //returns true if there are three consecutive tiles and one transparent
         private bool HasThreeConsecTiles(List<Button> lstbtn, out List<Button> lstHasThreeConsec, out Button b)
         {
-            lstHasThreeConsec = new List<Button>();
-            b = new Button();
+            lstHasThreeConsec = new();
+            b = null;
 
             if (lstbtn.Count >= 4)
             {
