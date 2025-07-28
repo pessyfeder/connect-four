@@ -121,15 +121,8 @@ namespace ConnectFourApp
 
         private void SetLblStatusForecolor()
         {
-            if (currentTurn == TurnEnum.Blue)
-            {
-                lblStatus.ForeColor = Color.Blue;
-            }
-
-            else
-            {
-                lblStatus.ForeColor = Color.Red;
-            }
+            Color statusColor = currentTurn == TurnEnum.Blue ?  Color.Blue :  Color.Red;
+            lblStatus.ForeColor = statusColor;
         }
 
         private void EnableControls()
@@ -161,7 +154,6 @@ namespace ConnectFourApp
                 if (c is Button b && b.BackColor == Color.Transparent)
                 {
                     //exit method if any transparent button is found
-
                     return;
                 }
 
@@ -207,16 +199,21 @@ namespace ConnectFourApp
             currentTurn = currentTurn == TurnEnum.Red ? TurnEnum.Blue : TurnEnum.Red;
             SetLblStatusForecolor();
         }
+
+        private bool HasAvailableButtons(List<Button> lstbtn)
+        {
+            return lstbtn.Any(btn => btn.BackColor == Color.Transparent);
+        }
         private void DoTurn(List<Button> lstbtn)
         {
             if (gameStatus == GameStatusEnum.Playing)
             {
                 DisableControls();
 
-                if (lstbtn.Any(btn => btn.BackColor == Color.Transparent))
+                if (HasAvailableButtons(lstbtn))
                 {
                     Button b = new();
-                    if (IsComputerTurn() && lstHasThreeConsec(b => b.Count == 3))
+                    if (IsComputerTurn() && lstHasThreeConsec.Count == 3)
                     {
                         for (int i = 0; i < lstHasThreeConsec.Count; i++)
                         {
@@ -293,11 +290,11 @@ namespace ConnectFourApp
             {
                 if (HasThreeConsecTiles(winningSet))
                 {
-                    lstHasThreeConsec.AddRange(winningSet); // Add all buttons in this set
+                    lstHasThreeConsec.AddRange(winningSet.Where(b => b.BackColor != Color.Transparent)); // Add all buttons in this set
                 }
                 else if (HasTwoConsecAndOneNone(winningSet))
                 {
-                    lstHasTwoConsecAndOneNone.AddRange(winningSet); // Add all buttons in this set
+                    lstHasTwoConsecAndOneNone.AddRange(winningSet.Where(b => b.BackColor != Color.Transparent)); // Add all buttons in this set
                 }
             }
 
@@ -354,6 +351,8 @@ namespace ConnectFourApp
 
         private void DoComputerTurnRandom()
         {
+            // picks a random list with available transparent button(s)
+            // and then calls DoTurn(), which sets "b" as the lowest transparent button in the list.
             var randomList = lstBtnColumnLists[rnd.Next(0, lstBtnColumnLists.Count())].Where(b => b.BackColor == Color.Transparent).ToList();
             DoTurn(randomList);
         }
