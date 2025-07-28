@@ -121,7 +121,7 @@ namespace ConnectFourApp
 
         private void SetLblStatusForecolor()
         {
-            Color statusColor = currentTurn == TurnEnum.Blue ?  Color.Blue :  Color.Red;
+            Color statusColor = currentTurn == TurnEnum.Blue ? Color.Blue : Color.Red;
             lblStatus.ForeColor = statusColor;
         }
 
@@ -204,6 +204,7 @@ namespace ConnectFourApp
         {
             return lstbtn.Any(btn => btn.BackColor == Color.Transparent);
         }
+
         private void DoTurn(List<Button> lstbtn)
         {
             if (gameStatus == GameStatusEnum.Playing)
@@ -213,38 +214,7 @@ namespace ConnectFourApp
                 if (HasAvailableButtons(lstbtn))
                 {
                     Button b = new();
-                    if (IsComputerTurn() && lstHasThreeConsec.Count == 3)
-                    {
-                        for (int i = 0; i < lstHasThreeConsec.Count; i++)
-                        {
-                            if (lstHasThreeConsec[i].BackColor == Color.Transparent)
-                            {
-                                // Check if it's before the three consecutive
-                                //this is not working
-                                if (i > 0 && lstHasThreeConsec[i - 1].BackColor == Color.Transparent)
-                                {
-                                    b = lstHasThreeConsec[i - 1];
-                                    break;
-                                }
-                                // Check if it's after the three consecutive
-                                if (i < lstHasThreeConsec.Count - 1 && lstHasThreeConsec[i + 1].BackColor == Color.Transparent)
-                                {
-                                    b = lstHasThreeConsec[i + 1];
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else if (IsComputerTurn() && lstHasTwoConsecAndOneNone.Any(b => b.BackColor == Color.Transparent))
-                    {
-                        //b = SHOULD BE the transparent button identified
-                        b = lstHasTwoConsecAndOneNone.First(b => b.BackColor == Color.Transparent);
-                    }
-                    else
-                    {
-                        //button is the lowest available button in the column
-                        b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
-                    }
+
                     //put the current turn's color on that button
                     SetButtonBackColor(b);
 
@@ -268,6 +238,12 @@ namespace ConnectFourApp
                             DoComputerTurnRandom();
                         }
                     }
+
+                    else
+                    {
+                        //button is the lowest available button in the column
+                        b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
+                    }
                 }
 
                 else
@@ -281,33 +257,21 @@ namespace ConnectFourApp
 
         private void DoComputerTurnOffenseDefense()
         {
-            // Clear previous lists to ensure fresh search
-            lstHasThreeConsec = new List<Button>();
-            lstHasTwoConsecAndOneNone = new List<Button>();
-
-            // Search for all sets of three consecutive buttons
-            foreach (var winningSet in lstWinningSets)
-            {
-                if (HasThreeConsecTiles(winningSet))
-                {
-                    lstHasThreeConsec.AddRange(winningSet.Where(b => b.BackColor != Color.Transparent)); // Add all buttons in this set
-                }
-                else if (HasTwoConsecAndOneNone(winningSet))
-                {
-                    lstHasTwoConsecAndOneNone.AddRange(winningSet.Where(b => b.BackColor != Color.Transparent)); // Add all buttons in this set
-                }
-            }
-
-            if (lstHasThreeConsec.Any())
+            if (IsComputerTurn() && HasThreeConsecTiles(winningSet))
             {
                 MessageBox.Show("Computer will block/complete with three consecutive tiles.");
+                //this will DoTurn on the lowest available transparent button in that list. Not good?
                 DoTurn(lstHasThreeConsec);
+                // b =  the transparent button one before (if exists) or 4 after (if exists) the lstThreeConsec;
             }
-            else if (lstHasTwoConsecAndOneNone.Any())
+            else if (IsComputerTurn() && HasTwoConsecAndOneNone(winningSet))
             {
-                MessageBox.Show("Computer will block with two consecutive tiles and one empty.");
+                MessageBox.Show("Computer will block/complete with two consecutive tiles and one empty.");
+                //this will DoTurn on the lowest available transparent button in that list. Not good?
                 DoTurn(lstHasTwoConsecAndOneNone);
+                //b = SHOULD BE the transparent button identified
             }
+
             else
             {
                 MessageBox.Show("No offensive/defensive move available, return.");
@@ -316,36 +280,58 @@ namespace ConnectFourApp
         }
         private bool HasTwoConsecAndOneNone(List<Button> lstbtn)
         {
-            for (int i = 0; i <= lstbtn.Count - 4; i++)
+            if (lstbtn.Count >= 4)
             {
-                if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
-                    &&
-                    lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
-                    lstbtn[i].BackColor == Color.Transparent &&
-                    lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
+                for (int i = 0; i <= lstbtn.Count - 4; i++)
                 {
-                    return true;
+                    if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
+                        &&
+                        lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
+                        lstbtn[i + 2].BackColor == Color.Transparent &&
+                        lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
         }
 
         //returns true if there are three consecutive tiles and one transparent
-        private bool HasThreeConsecTiles(List<Button> lstbtn)
+        private bool HasThreeConsecTiles(List<Button> lstbtn, out List<Button> lstHasThreeConsec, out Button b)
         {
-            for (int i = 0; i <= lstbtn.Count - 4; i++)
+            lstHasThreeConsec = new List<Button>();
+            b = new Button();
+
+            if (lstbtn.Count >= 4)
             {
-                if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
-                    &&
-                    lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
-                    lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
-                    // Check if the button before or after this list is transparent
-                    ((i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ||
-                    (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent)))
+                for (int i = 0; i <= lstbtn.Count - 4; i++)
                 {
-                    return true;
+                    if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
+                        &&
+                        lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
+                        lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
+                        // Check if the button before or after this list is transparent
+                        ((i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ||
+                        (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent)))
+                    {
+                        //add the three buttons to the list
+                        lstHasThreeConsec.Add(lstbtn[i]);
+                        lstHasThreeConsec.Add(lstbtn[i + 1]);
+                        lstHasThreeConsec.Add(lstbtn[i + 2]);
+                        if (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent)
+                        {
+                            b = lstbtn[i - 1]; // Preceding transparent button
+                        }
+                        else if (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent)
+                        {
+                            b = lstbtn[i + 3]; // Following transparent button
+                        }
+                        return true;
+                    }
                 }
             }
+
             return false;
         }
 
