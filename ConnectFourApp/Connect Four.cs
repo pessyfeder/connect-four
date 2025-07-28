@@ -210,7 +210,7 @@ namespace ConnectFourApp
         {
             if (gameStatus == GameStatusEnum.Playing)
             {
-                DisableControls();               
+                DisableControls();
 
                 if (HasAvailableButtons(lstbtn))
                 {
@@ -230,10 +230,11 @@ namespace ConnectFourApp
                     if (IsComputerTurn())
                     {
                         DoComputerTurnOffenseDefense();
-                    }
-                    else if (IsComputerTurn())
-                    {
-                        DoComputerTurnRandom();
+
+                        if (IsComputerTurn())
+                        {
+                            DoComputerTurnRandom();
+                        }
                     }
                 }
                 //in each event, SetButtonBackColor(b); the value of b just changes. How do I do that?
@@ -252,11 +253,13 @@ namespace ConnectFourApp
             {
                 MessageBox.Show("Computer will block/complete with three consecutive tiles.");
                 SetButtonBackColor(b);
+                SwitchTurns();
             }
             else if (lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out lstHasThreeConsec, out b)))
             {
                 MessageBox.Show("Computer will block/complete with two consecutive tiles and one empty.");
                 SetButtonBackColor(b);
+                SwitchTurns();
             }
             else
             {
