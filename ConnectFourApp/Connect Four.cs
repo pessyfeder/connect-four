@@ -8,6 +8,7 @@ namespace ConnectFourApp
     public partial class frmConnectFour : Form
     {
         Random rnd = new();
+        Button b = new();
 
         List<Button> lstBtnColumn1;
         List<Button> lstBtnColumn2;
@@ -212,44 +213,39 @@ namespace ConnectFourApp
                 DisableControls();
 
                 if (HasAvailableButtons(lstbtn))
-                {
-                    Button b = new();
-
-                    //put the current turn's color on that button
-                    SetButtonBackColor(b);
-
-                    lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
-
-                    lstWinningSets.ForEach(lstBtn =>
-                    {
-                        // Only switch turns if there's no winner
-                        if (!IsWinner(lstBtn))
-                        {
-                            SwitchTurns();
-                        }
-                    });
+                { 
 
                     if (IsComputerTurn())
                     {
                         DoComputerTurnOffenseDefense();
-
-                        if (IsComputerTurn())
-                        {
-                            DoComputerTurnRandom();
-                        }
                     }
-
+                    else if (IsComputerTurn())
+                    {
+                        DoComputerTurnRandom();
+                    }
                     else
                     {
                         //button is the lowest available button in the column
                         b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
+                        SetButtonBackColor(b);
                     }
                 }
-
+                //in each event, SetButtonBackColor(b); the value of b just changes. How do I do that?
                 else
                 {
                     MessageBox.Show("Slot is unavailable. Please select another slot.");
                 }
+
+                lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
+
+                lstWinningSets.ForEach(lstBtn =>
+                {
+                    // Only switch turns if there's no winner
+                    if (!IsWinner(lstBtn))
+                    {
+                        SwitchTurns();
+                    }
+                });
             }
 
             DisplayGameStatus();
@@ -257,29 +253,27 @@ namespace ConnectFourApp
 
         private void DoComputerTurnOffenseDefense()
         {
-            if (IsComputerTurn() && HasThreeConsecTiles(winningSet))
+            if (IsComputerTurn() && lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out lstHasThreeConsec, out b)))
             {
                 MessageBox.Show("Computer will block/complete with three consecutive tiles.");
-                //this will DoTurn on the lowest available transparent button in that list. Not good?
-                DoTurn(lstHasThreeConsec);
-                // b =  the transparent button one before (if exists) or 4 after (if exists) the lstThreeConsec;
+                SetButtonBackColor(b);
             }
-            else if (IsComputerTurn() && HasTwoConsecAndOneNone(winningSet))
+            else if (IsComputerTurn() && lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out lstHasThreeConsec, out b)))
             {
                 MessageBox.Show("Computer will block/complete with two consecutive tiles and one empty.");
-                //this will DoTurn on the lowest available transparent button in that list. Not good?
-                DoTurn(lstHasTwoConsecAndOneNone);
-                //b = SHOULD BE the transparent button identified
+                SetButtonBackColor(b);
             }
-
             else
             {
                 MessageBox.Show("No offensive/defensive move available, return.");
                 return;
             }
         }
-        private bool HasTwoConsecAndOneNone(List<Button> lstbtn)
+        private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out List<Button> lstHasTwoConsecAndOneNone, out Button b)
         {
+            lstHasTwoConsecAndOneNone = new List<Button>();
+            b = new Button();
+
             if (lstbtn.Count >= 4)
             {
                 for (int i = 0; i <= lstbtn.Count - 4; i++)
@@ -290,6 +284,12 @@ namespace ConnectFourApp
                         lstbtn[i + 2].BackColor == Color.Transparent &&
                         lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
                     {
+                        lstHasTwoConsecAndOneNone.Add(lstbtn[i]);
+                        lstHasTwoConsecAndOneNone.Add(lstbtn[i + 1]);
+                        lstHasTwoConsecAndOneNone.Add(lstbtn[i + 3]);
+                        //will only detect transparent button if it's the third in row. 
+                        //need to also check if it's the second in row, followed by two colored ones.
+                        b = lstbtn[i + 2];
                         return true;
                     }
                 }
