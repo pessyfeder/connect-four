@@ -281,7 +281,7 @@ namespace ConnectFourApp
                         lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
                         lstbtn[i + 2].BackColor == Color.Transparent &&
                         lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
-                    {
+                    {  
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i]);
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i + 1]);
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i + 3]);
