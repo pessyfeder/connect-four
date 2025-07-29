@@ -107,7 +107,7 @@ namespace ConnectFourApp
 
             playAgainstComp = optPlayAgainstComp.Checked;
             currentTurn = TurnEnum.Red;
-            
+
             if (gameStatus == GameStatusEnum.NotStarted)
             {
                 DisableControls();
@@ -142,13 +142,32 @@ namespace ConnectFourApp
         }
 
         private void SetButtonBackColor(Button btn)
-        {
-            Color c = Color.Transparent;
-            if (gameStatus == GameStatusEnum.Playing)
+        {           
+
+            foreach (var column in lstBtnColumnLists)
             {
-                c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
+                Button lastTransparentButton = column.Last(btn => btn.BackColor == Color.Transparent);
+
+                Color c = Color.Transparent;
+
+                if (gameStatus == GameStatusEnum.Playing)
+                {
+                    c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
+                }
+
+                if (column.Contains(btn) && btn == lastTransparentButton)
+                {
+                    btn.BackColor = c;
+                }
+                else 
+                {
+                    MessageBox.Show("cannot add tile");
+                }
             }
-            btn.BackColor = c;
+
+            
+
+            
         }
 
         private void DetectTie()
@@ -255,44 +274,29 @@ namespace ConnectFourApp
 
         private void DoComputerTurnOffenseDefense()
         {
-            foreach (var column in lstBtnColumnLists)
+            if (lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out lstHasThreeConsec, out Button b)))
             {
-                Button lastTransparentButton = column.LastOrDefault(btn => btn.BackColor == Color.Transparent);
+                // Check if bThree is the last transparent button in its column
+                MessageBox.Show("Found Three Consec");
 
-                if (lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out lstHasThreeConsec, out Button b)))
-                {
-                    // Check if bThree is the last transparent button in its column
-                    MessageBox.Show("Found Three Consec");
-                    if (b == lastTransparentButton)
-                    {
-                        MessageBox.Show("Computer will block/complete with three consecutive tiles.");
-                        SetButtonBackColor(b); // Modify bThree 
-                        SwitchTurns();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Computer cannot block/complete with three consecutive tiles.");
+                SetButtonBackColor(b); // Modify bThree 
+                SwitchTurns();
 
-                    }
-                    return; // Exit after handling the case
-                }
-                else if (lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out lstHasTwoConsecAndOneNone, out Button b)))
-                {
-                    // Check if bTwo is the last transparent button in its column
-                    if (b == lastTransparentButton)
-                    {
-                        MessageBox.Show("Computer will block/complete with two consecutive tiles and one empty.");
-                        SetButtonBackColor(b); // Modify bTwo
-                        SwitchTurns();
-                    }
-                    return; // Exit after handling the case
-                }
-                else
-                {
-                    return;
-                }
+                return; // Exit after handling the case
+            }
+            else if (lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out lstHasTwoConsecAndOneNone, out Button b)))
+            {
+                MessageBox.Show("Found Two Consec and One Empty");
+                SetButtonBackColor(b); // Modify bTwo
+                SwitchTurns();
+                return; // Exit after handling the case
+            }
+            else
+            {
+                return;
             }
         }
+
         private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out List<Button> lstHasTwoConsecAndOneNone, out Button b)
         {
             lstHasTwoConsecAndOneNone = new();
@@ -307,7 +311,7 @@ namespace ConnectFourApp
                         lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
                         lstbtn[i + 2].BackColor == Color.Transparent &&
                         lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
-                    {  
+                    {
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i]);
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i + 1]);
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i + 3]);
