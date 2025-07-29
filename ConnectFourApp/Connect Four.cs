@@ -266,7 +266,7 @@ namespace ConnectFourApp
                     if (b == lastTransparentButton)
                     {
                         MessageBox.Show("Computer will block/complete with three consecutive tiles.");
-                        SetButtonBackColor(b); // Modify bThree
+                        SetButtonBackColor(b); // Modify bThree 
                         SwitchTurns();
                     }
                     else
