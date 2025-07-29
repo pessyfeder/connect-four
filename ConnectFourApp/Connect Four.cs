@@ -76,6 +76,9 @@ namespace ConnectFourApp
                 new() { button4, button9, button14, button19 }
             };
 
+            List<Button> lstHasThreeConsec = new();
+            List<Button> lstHasTwoConsecAndOneNone = new();
+
             lstOpt = new() { opt2Player, optPlayAgainstComp };
 
             lstOpt.ForEach(l => l.CheckedChanged += L_CheckedChanged);
@@ -104,7 +107,7 @@ namespace ConnectFourApp
 
             playAgainstComp = optPlayAgainstComp.Checked;
             currentTurn = TurnEnum.Red;
-
+            
             if (gameStatus == GameStatusEnum.NotStarted)
             {
                 DisableControls();
@@ -193,12 +196,12 @@ namespace ConnectFourApp
                 DetectTie();
             }
 
+
         }
 
         private void SwitchTurns()
         {
             currentTurn = currentTurn == TurnEnum.Red ? TurnEnum.Blue : TurnEnum.Red;
-            SetLblStatusForecolor();
         }
 
         private bool HasAvailableButtons(List<Button> lstbtn)
@@ -206,7 +209,7 @@ namespace ConnectFourApp
             return lstbtn.Any(btn => btn.BackColor == Color.Transparent);
         }
 
-        private void DoTurn(List<Button> lstbtn)
+        private async Task DoTurn(List<Button> lstbtn)
         {
             if (gameStatus == GameStatusEnum.Playing)
             {
@@ -219,23 +222,27 @@ namespace ConnectFourApp
 
                     lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
 
-                    lstWinningSets.ForEach(lstBtn =>
+                    if (gameStatus == GameStatusEnum.Playing)
                     {
-                        if (!IsWinner(lstBtn))
-                        {
-                            SwitchTurns();
-                        }
-                    });
-
-                    if (IsComputerTurn())
-                    {
-                        DoComputerTurnOffenseDefense();
+                        SwitchTurns();
 
                         if (IsComputerTurn())
                         {
-                            DoComputerTurnRandom();
+                            DisplayGameStatus();
+                            await Task.Delay(1000);
+
+                            DoComputerTurnOffenseDefense();
+
+                            if (IsComputerTurn())
+                            {
+                                DoComputerTurnRandom();
+                            }
+
+                            lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
                         }
                     }
+
+                    DisplayGameStatus();
                 }
                 //in each event, SetButtonBackColor(b); the value of b just changes. How do I do that?
                 else
@@ -244,7 +251,6 @@ namespace ConnectFourApp
                 }
             }
 
-            DisplayGameStatus();
         }
 
         private void DoComputerTurnOffenseDefense()
@@ -260,11 +266,6 @@ namespace ConnectFourApp
                 MessageBox.Show("Computer will block/complete with two consecutive tiles and one empty.");
                 SetButtonBackColor(b);
                 SwitchTurns();
-            }
-            else
-            {
-                MessageBox.Show("No offensive/defensive move available, return.");
-                return;
             }
         }
         private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out List<Button> lstHasTwoConsecAndOneNone, out Button b)
@@ -385,6 +386,8 @@ namespace ConnectFourApp
             msg = playAgainstComp ? optPlayAgainstComp.Text + " - " + msg : opt2Player.Text + " - " + msg;
 
             lblStatus.Text = msg;
+
+            SetLblStatusForecolor();
         }
         private void BtnStart_Click(object? sender, EventArgs e)
         {
