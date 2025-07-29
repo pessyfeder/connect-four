@@ -255,17 +255,42 @@ namespace ConnectFourApp
 
         private void DoComputerTurnOffenseDefense()
         {
-            if (lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out lstHasThreeConsec, out b)))
+            foreach (var column in lstBtnColumnLists)
             {
-                MessageBox.Show("Computer will block/complete with three consecutive tiles.");
-                SetButtonBackColor(b);
-                SwitchTurns();
-            }
-            else if (lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out lstHasThreeConsec, out b)))
-            {
-                MessageBox.Show("Computer will block/complete with two consecutive tiles and one empty.");
-                SetButtonBackColor(b);
-                SwitchTurns();
+                Button lastTransparentButton = column.LastOrDefault(btn => btn.BackColor == Color.Transparent);
+
+                if (lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out lstHasThreeConsec, out Button b)))
+                {
+                    // Check if bThree is the last transparent button in its column
+                    MessageBox.Show("Found Three Consec");
+                    if (b == lastTransparentButton)
+                    {
+                        MessageBox.Show("Computer will block/complete with three consecutive tiles.");
+                        SetButtonBackColor(b); // Modify bThree
+                        SwitchTurns();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Computer cannot block/complete with three consecutive tiles.");
+
+                    }
+                    return; // Exit after handling the case
+                }
+                else if (lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out lstHasTwoConsecAndOneNone, out Button b)))
+                {
+                    // Check if bTwo is the last transparent button in its column
+                    if (b == lastTransparentButton)
+                    {
+                        MessageBox.Show("Computer will block/complete with two consecutive tiles and one empty.");
+                        SetButtonBackColor(b); // Modify bTwo
+                        SwitchTurns();
+                    }
+                    return; // Exit after handling the case
+                }
+                else
+                {
+                    return;
+                }
             }
         }
         private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out List<Button> lstHasTwoConsecAndOneNone, out Button b)
