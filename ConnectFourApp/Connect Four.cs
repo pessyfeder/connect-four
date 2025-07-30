@@ -77,9 +77,6 @@ namespace ConnectFourApp
                 new() { button4, button9, button14, button19 }
             };
 
-            List<Button>? lstHasThreeConsec = new();
-            List<Button>? lstHasTwoConsecAndOneNone = new();
-
             lstOpt = new() { opt2Player, optPlayAgainstComp };
 
             lstOpt.ForEach(l => l.CheckedChanged += L_CheckedChanged);
@@ -252,8 +249,8 @@ namespace ConnectFourApp
                         if (IsComputerTurn())
                         {
                             DisplayGameStatus();
-                            await Task.Delay(1000);
 
+                            await Task.Delay(1000);
                             DoComputerTurnOffenseDefense();
 
                             if (IsComputerTurn())
@@ -273,7 +270,6 @@ namespace ConnectFourApp
                     MessageBox.Show("Slot is unavailable. Please select another slot.");
                 }
             }
-
         }
 
         private void DoComputerTurnOffenseDefense()
@@ -349,6 +345,7 @@ namespace ConnectFourApp
             {
                 for (int i = 0; i <= lstbtn.Count - 4; i++)
                 {
+                    //which list is lstbtn?
                     if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
                         &&
                         lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
