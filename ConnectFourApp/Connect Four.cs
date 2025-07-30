@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -274,27 +275,30 @@ namespace ConnectFourApp
 
         private void DoComputerTurnOffenseDefense()
         {
-            if (lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out lstHasThreeConsec, out Button b)))
+            if (lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out Button b)))
             {
-                MessageBox.Show("Found Three Consec");
+                Debug.Print("Found Three Consec");
+                //MessageBox.Show("Found Three Consec");
                 SetButtonBackColor(b);
                 SwitchTurns();
                 return; // Exit after handling the case
             }
-            else if (lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out lstHasTwoConsecAndOneNone, out Button b)))
+            else if (lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out Button b)))
             {
-                MessageBox.Show("Found Two Consec and One Empty");
+                Debug.Print("Found Two Consec and One Empty");
+                //MessageBox.Show("");
                 SetButtonBackColor(b); // Modify bTwo
                 SwitchTurns();
                 return; // Exit after handling the case
             }
             else
             {
+                Debug.Print("DoComputerTurnOffenseDefense found nothing");
                 return;
             }
         }
 
-        private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out List<Button> lstHasTwoConsecAndOneNone, out Button b)
+        private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out Button b)
         {
             lstHasTwoConsecAndOneNone = new();
             b = null;
@@ -336,7 +340,7 @@ namespace ConnectFourApp
             return false;
         }
 
-        private bool HasThreeConsecTiles(List<Button> lstbtn, out List<Button> lstHasThreeConsec, out Button b)
+        private bool HasThreeConsecTiles(List<Button> lstbtn, out Button b)
         {
             lstHasThreeConsec = new();
             b = null;
@@ -358,19 +362,14 @@ namespace ConnectFourApp
                         lstHasThreeConsec.Add(lstbtn[i]);
                         lstHasThreeConsec.Add(lstbtn[i + 1]);
                         lstHasThreeConsec.Add(lstbtn[i + 2]);
-                        if (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent)
-                        {
-                            b = lstbtn[i - 1]; // Preceding transparent button
-                        }
-                        else if (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent)
-                        {
-                            b = lstbtn[i + 3]; // Following transparent button
-                        }
+
+                        b = (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ? lstbtn[i - 1] : lstbtn[i + 3];
+                        Debug.Print("HasThreeConsecTiles true");
                         return true;
                     }
                 }
             }
-
+            Debug.Print("HasThreeConsecTiles false");
             return false;
         }
 
