@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -142,32 +143,15 @@ namespace ConnectFourApp
         }
 
         private void SetButtonBackColor(Button btn)
-        {           
+        {
+            Color c = Color.Transparent;
 
-            foreach (var column in lstBtnColumnLists)
+            if (gameStatus == GameStatusEnum.Playing)
             {
-                Button lastTransparentButton = column.Last(btn => btn.BackColor == Color.Transparent);
-
-                Color c = Color.Transparent;
-
-                if (gameStatus == GameStatusEnum.Playing)
-                {
-                    c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
-                }
-
-                if (column.Contains(btn) && btn == lastTransparentButton)
-                {
-                    btn.BackColor = c;
-                }
-                else 
-                {
-                    MessageBox.Show("cannot add tile");
-                }
+                c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
             }
 
-            
-
-            
+            btn.BackColor = c;
         }
 
         private void DetectTie()
@@ -276,13 +260,28 @@ namespace ConnectFourApp
         {
             if (lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out lstHasThreeConsec, out Button b)))
             {
-                // Check if bThree is the last transparent button in its column
                 MessageBox.Show("Found Three Consec");
 
-                SetButtonBackColor(b); // Modify bThree 
-                SwitchTurns();
+                Button lastTransparentButton = lstBtnColumnLists.ForEach(lst => lst.Last(btn => btn.BackColor == Color.Transparent);
 
-                return; // Exit after handling the case
+                foreach (var column in lstBtnColumnLists)
+                {
+                    Button lastTransparentButton = column.Last(btn => btn.BackColor == Color.Transparent);
+                    if (column.Contains(b) && b == lastTransparentButton)
+                    {
+                        SetButtonBackColor(b);
+                    }
+                    else
+                    {
+                        MessageBox.Show("cannot add tile");
+                    }
+                    // Check if bThree is the last transparent button in its column
+
+                    SetButtonBackColor(b); // Modify bThree 
+                    SwitchTurns();
+
+                    return; // Exit after handling the case
+                }
             }
             else if (lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out lstHasTwoConsecAndOneNone, out Button b)))
             {
@@ -296,6 +295,11 @@ namespace ConnectFourApp
                 return;
             }
         }
+
+
+
+
+
 
         private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out List<Button> lstHasTwoConsecAndOneNone, out Button b)
         {
