@@ -147,7 +147,7 @@ namespace ConnectFourApp
             Color c = Color.Transparent;
 
             if (gameStatus == GameStatusEnum.Playing &&
-                IsLastTransparentButtonInAnyList(b, lstBtnColumnLists))
+                IsLastTransparentButtonInAnyList(btn, lstBtnColumnLists))
             {
                 c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
             }
