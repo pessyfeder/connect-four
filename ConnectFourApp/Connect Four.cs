@@ -22,10 +22,6 @@ namespace ConnectFourApp
 
         List<List<Button>> lstBtnColumnLists;
         List<List<Button>> lstWinningSets;
-
-        List<Button> lstHasThreeConsec;
-        List<Button> lstHasTwoConsecAndOneNone;
-
         List<RadioButton> lstOpt;
 
         bool playAgainstComp = false;
@@ -143,34 +139,44 @@ namespace ConnectFourApp
         private void SetButtonBackColor(Button btn)
         {
             Color c = Color.Transparent;
+            if (gameStatus == GameStatusEnum.Playing) {
+                var b = IsLastTransparentButtonInAnyList(btn, lstBtnColumnLists);
+                if (b == true) 
+                {
+                    c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
+                }
 
-            if (gameStatus == GameStatusEnum.Playing &&
-                IsLastTransparentButtonInAnyList(btn, lstBtnColumnLists))
-            {
-                c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
+                else
+                {
+                    MessageBox.Show("cannot add tile");
+                    return;
+                }
+                btn.BackColor = c;
             }
-            else
-            {
-                MessageBox.Show("cannot add tile");
-                return;
-            }
-
-            btn.BackColor = c;
         }
 
         private bool IsLastTransparentButtonInAnyList(Button targetButton, List<List<Button>> listOfButtonLists)
         {
+            int n = 0;
             foreach (var buttonList in listOfButtonLists)
             {
+                n++;
+                var b = buttonList.Contains(targetButton);
                 // Filter for transparent buttons in the current list
-                var transparentButtons = buttonList.Where(b => b.BackColor == Color.Transparent).ToList();
-
-                // Check if the target button is present and is the last transparent button
-                if (transparentButtons.Any() && transparentButtons.Last() == targetButton)
+                if (b)
                 {
-                    return true;
+                    var transparentButtons = buttonList.Where(b => b.BackColor == Color.Transparent).ToList();
+
+                    // Check if the target button is present and is the last transparent button
+
+                    if (transparentButtons.Any() && transparentButtons.Last() == targetButton)
+                    {
+                        return true;
+
+                    }
                 }
             }
+
             return false;
         }
 
@@ -297,10 +303,43 @@ namespace ConnectFourApp
                 return;
             }
         }
+        private bool HasThreeConsecTiles(List<Button> lstbtn, out Button b)
+        {
+            List<Button> lstHasThreeConsec = new();
+            b = null;
+
+            if (lstbtn.Count >= 4)
+            {
+                for (int i = 0; i <= lstbtn.Count - 4; i++)
+                {
+                    //which list is lstbtn?
+                    if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
+                        &&
+                        lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
+                        lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
+                        // Check if the button before or after this list is transparent
+                        ((i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ||
+                        (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent)))
+                    {
+                        //add the three buttons to the list
+                        lstHasThreeConsec.Add(lstbtn[i]);
+                        lstHasThreeConsec.Add(lstbtn[i + 1]);
+                        lstHasThreeConsec.Add(lstbtn[i + 2]);
+
+                        b = (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ? lstbtn[i - 1] : lstbtn[i + 3];
+
+                        Debug.Print("Column " + i.ToString() + " HasThreeConsecTiles true");
+                        return true;
+                    }
+                }
+            }
+            Debug.Print("HasThreeConsecTiles false");
+            return false;
+        }
 
         private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out Button b)
         {
-            lstHasTwoConsecAndOneNone = new();
+            List<Button> lstHasTwoConsecAndOneNone = new();
             b = null;
 
             if (lstbtn.Count >= 4)
@@ -337,39 +376,6 @@ namespace ConnectFourApp
                     }
                 }
             }
-            return false;
-        }
-
-        private bool HasThreeConsecTiles(List<Button> lstbtn, out Button b)
-        {
-            lstHasThreeConsec = new();
-            b = null;
-
-            if (lstbtn.Count >= 4)
-            {
-                for (int i = 0; i <= lstbtn.Count - 4; i++)
-                {
-                    //which list is lstbtn?
-                    if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
-                        &&
-                        lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
-                        lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
-                        // Check if the button before or after this list is transparent
-                        ((i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ||
-                        (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent)))
-                    {
-                        //add the three buttons to the list
-                        lstHasThreeConsec.Add(lstbtn[i]);
-                        lstHasThreeConsec.Add(lstbtn[i + 1]);
-                        lstHasThreeConsec.Add(lstbtn[i + 2]);
-
-                        b = (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ? lstbtn[i - 1] : lstbtn[i + 3];
-                        Debug.Print("HasThreeConsecTiles true");
-                        return true;
-                    }
-                }
-            }
-            Debug.Print("HasThreeConsecTiles false");
             return false;
         }
 
