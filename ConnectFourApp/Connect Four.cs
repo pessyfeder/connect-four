@@ -141,6 +141,8 @@ namespace ConnectFourApp
             Color c = Color.Transparent;
             if (gameStatus == GameStatusEnum.Playing) {
                 var b = IsLastTransparentButtonInAnyList(btn, lstBtnColumnLists);
+                //when a set of three is found this returns false
+                //which button is btn then?
                 if (b == true) 
                 {
                     c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
@@ -161,7 +163,7 @@ namespace ConnectFourApp
             foreach (var buttonList in listOfButtonLists)
             {
                 n++;
-                var b = buttonList.Contains(targetButton);
+                bool b = buttonList.Contains(targetButton);
                 // Filter for transparent buttons in the current list
                 if (b)
                 {
@@ -282,8 +284,8 @@ namespace ConnectFourApp
         private void DoComputerTurnOffenseDefense()
         {
             if (lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out Button b)))
-            {
-                Debug.Print("Found Three Consec");
+            {            
+                Debug.Print("Found Three Consec true");
                 //MessageBox.Show("Found Three Consec");
                 SetButtonBackColor(b);
                 SwitchTurns();
@@ -303,11 +305,13 @@ namespace ConnectFourApp
                 return;
             }
         }
+        //debug statement to help me track which number winningList is being iterated through?
         private bool HasThreeConsecTiles(List<Button> lstbtn, out Button b)
         {
             List<Button> lstHasThreeConsec = new();
             b = null;
 
+            //Do I need to loop through all the lists in LstWinningSets in here?
             if (lstbtn.Count >= 4)
             {
                 for (int i = 0; i <= lstbtn.Count - 4; i++)
@@ -328,7 +332,7 @@ namespace ConnectFourApp
 
                         b = (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ? lstbtn[i - 1] : lstbtn[i + 3];
 
-                        Debug.Print("Column " + i.ToString() + " HasThreeConsecTiles true");
+                        Debug.Print("HasThreeConsecTiles in WinningList " + i.ToString() + " true");
                         return true;
                     }
                 }
