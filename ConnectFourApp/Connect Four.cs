@@ -10,7 +10,6 @@ namespace ConnectFourApp
     public partial class frmConnectFour : Form
     {
         Random rnd = new();
-        Button b = new();
 
         List<Button> lstBtnColumn1;
         List<Button> lstBtnColumn2;
@@ -246,7 +245,7 @@ namespace ConnectFourApp
 
                 if (HasAvailableButtons(lstbtn))
                 {
-                    b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
+                    Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
                     SetButtonBackColor(b);
 
                     lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
@@ -283,68 +282,62 @@ namespace ConnectFourApp
 
         private void DoComputerTurnOffenseDefense()
         {
-            if (lstWinningSets.Any(lst => HasThreeConsecTiles(lst, out Button b)))
-            {            
-                Debug.Print("Found Three Consec true");
-                //MessageBox.Show("Found Three Consec");
-                SetButtonBackColor(b);
-                SwitchTurns();
-                return; // Exit after handling the case
-            }
-            else if (lstWinningSets.Any(lst => HasTwoConsecAndOneNone(lst, out Button b)))
+            for (int index = 0; index < lstWinningSets.Count; index++)
             {
-                Debug.Print("Found Two Consec and One Empty");
-                //MessageBox.Show("");
-                SetButtonBackColor(b); // Modify bTwo
-                SwitchTurns();
-                return; // Exit after handling the case
+                var lst = lstWinningSets[index];
+                if (HasThreeConsecTiles(lst, out Button b3, index)) // Pass the index to the function
+                {
+                    Debug.Print("Found Three Consec true in WinningSet " + index);
+                    SetButtonBackColor(b3);
+                    SwitchTurns();
+                    return; // Exit after handling the case
+                }
+                else if (HasTwoConsecAndOneNone(lst, out Button b201))
+                {
+                    Debug.Print("Found Two Consec and One Empty in WinningSet " + index);
+                    SetButtonBackColor(b201);
+                    SwitchTurns();
+                    return; // Exit after handling the case
+                }
             }
-            else
-            {
-                Debug.Print("DoComputerTurnOffenseDefense found nothing");
-                return;
-            }
+            Debug.Print("DoComputerTurnOffenseDefense found nothing");
         }
-        //debug statement to help me track which number winningList is being iterated through?
-        private bool HasThreeConsecTiles(List<Button> lstbtn, out Button b)
+
+        private bool HasThreeConsecTiles(List<Button> lstbtn, out Button b3, int listIndex) // Add listIndex parameter
         {
             List<Button> lstHasThreeConsec = new();
-            b = null;
+            b3 = null;
 
-            //Do I need to loop through all the lists in LstWinningSets in here?
             if (lstbtn.Count >= 4)
             {
                 for (int i = 0; i <= lstbtn.Count - 4; i++)
                 {
-                    //which list is lstbtn?
                     if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
                         &&
                         lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
                         lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
-                        // Check if the button before or after this list is transparent
                         ((i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ||
                         (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent)))
                     {
-                        //add the three buttons to the list
                         lstHasThreeConsec.Add(lstbtn[i]);
                         lstHasThreeConsec.Add(lstbtn[i + 1]);
                         lstHasThreeConsec.Add(lstbtn[i + 2]);
 
-                        b = (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ? lstbtn[i - 1] : lstbtn[i + 3];
+                        b3 = (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ? lstbtn[i - 1] : lstbtn[i + 3];
 
-                        Debug.Print("HasThreeConsecTiles in WinningList " + i.ToString() + " true");
+                        Debug.Print("HasThreeConsecTiles in WinningList " + listIndex + " at index " + i.ToString() + " true"); // Include list index
                         return true;
                     }
                 }
             }
-            Debug.Print("HasThreeConsecTiles false");
+            Debug.Print("HasThreeConsecTiles false in WinningList " + listIndex); // Include list index
             return false;
         }
 
-        private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out Button b)
+        private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out Button b201)
         {
             List<Button> lstHasTwoConsecAndOneNone = new();
-            b = null;
+            b201 = null;
 
             if (lstbtn.Count >= 4)
             {
@@ -360,7 +353,7 @@ namespace ConnectFourApp
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i + 1]);
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i + 3]);
 
-                        b = lstbtn[i + 2];
+                        b201 = lstbtn[i + 2];
 
                         return true;
                     }
@@ -374,7 +367,7 @@ namespace ConnectFourApp
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i + 2]);
                         lstHasTwoConsecAndOneNone.Add(lstbtn[i + 3]);
 
-                        b = lstbtn[i + 1];
+                        b201 = lstbtn[i + 1];
 
                         return true;
                     }
