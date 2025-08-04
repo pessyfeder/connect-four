@@ -196,7 +196,7 @@ namespace ConnectFourApp
             }
         }
 
-        private bool IsWinner(List<Button> lstbtn )
+        private bool IsWinner(List<Button> lstbtn)
         {         
             for (int i = 0; i <= lstbtn.Count - 4; i++)
             {
@@ -212,19 +212,22 @@ namespace ConnectFourApp
             return false;
         }
 
-        private void DetectWinnerorTie(List<Button> lstbtn)
+        private void DetectWinnerorTie()
         {
-            if (IsWinner(lstbtn))
+            foreach (var winningSet in lstWinningSets)
             {
-                gameStatus = GameStatusEnum.Winner;
-                EnableControls();
-                DisplayGameStatus();
-            }
-
-            else
-            {
-                DetectTie();
-            }
+                if (IsWinner(winningSet))
+                {
+                    gameStatus = GameStatusEnum.Winner;
+                    EnableControls();
+                    DisplayGameStatus();
+                    return;
+                }
+                else
+                {
+                    DetectTie();
+                }
+            }            
         }
 
         private void SwitchTurns()
@@ -248,7 +251,7 @@ namespace ConnectFourApp
                     Button b = lstbtn.Last(btn => btn.BackColor == Color.Transparent);
                     SetButtonBackColor(b);
 
-                    lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
+                    DetectWinnerorTie();
 
                     if (gameStatus == GameStatusEnum.Playing)
                     {
@@ -266,7 +269,7 @@ namespace ConnectFourApp
                                 DoComputerTurnRandom();
                             }
 
-                            lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
+                            DetectWinnerorTie();
                         }
                     }
 
@@ -289,7 +292,7 @@ namespace ConnectFourApp
                 {
                     Debug.Print("Found Three Consec true in WinningSet " + index);
                     SetButtonBackColor(b3);
-                    lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
+                    DetectWinnerorTie();
                     foreach (var lstBtn in lstWinningSets)
                     {
                         if (!IsWinner(lstBtn))
@@ -303,7 +306,7 @@ namespace ConnectFourApp
                 {
                     Debug.Print("Found Two Consec and One Empty in WinningSet " + index);
                     SetButtonBackColor(b201);
-                    lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
+                    DetectWinnerorTie();
                     foreach (var lstBtn in lstWinningSets)
                     {
                         if (!IsWinner(lstBtn))
