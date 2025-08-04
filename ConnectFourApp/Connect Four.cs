@@ -196,8 +196,8 @@ namespace ConnectFourApp
             }
         }
 
-        private bool IsWinner(List<Button> lstbtn)
-        {
+        private bool IsWinner(List<Button> lstbtn )
+        {         
             for (int i = 0; i <= lstbtn.Count - 4; i++)
             {
                 if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
@@ -272,7 +272,7 @@ namespace ConnectFourApp
 
                     DisplayGameStatus();
                 }
-                //in each event, SetButtonBackColor(b); the value of b just changes. How do I do that?
+
                 else
                 {
                     MessageBox.Show("Slot is unavailable. Please select another slot.");
@@ -289,14 +289,28 @@ namespace ConnectFourApp
                 {
                     Debug.Print("Found Three Consec true in WinningSet " + index);
                     SetButtonBackColor(b3);
-                    SwitchTurns();
-                    return; // Exit after handling the case
+                    lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
+                    foreach (var lstBtn in lstWinningSets)
+                    {
+                        if (!IsWinner(lstBtn))
+                        {
+                            SwitchTurns();
+                        }
+                    }                    
+                    return;
                 }
                 else if (HasTwoConsecAndOneNone(lst, out Button b201))
                 {
                     Debug.Print("Found Two Consec and One Empty in WinningSet " + index);
                     SetButtonBackColor(b201);
-                    SwitchTurns();
+                    lstWinningSets.ForEach(lstBtn => DetectWinnerorTie(lstBtn));
+                    foreach (var lstBtn in lstWinningSets)
+                    {
+                        if (!IsWinner(lstBtn))
+                        {
+                            SwitchTurns();
+                        }
+                    }    
                     return; // Exit after handling the case
                 }
             }
@@ -323,6 +337,7 @@ namespace ConnectFourApp
                         lstHasThreeConsec.Add(lstbtn[i + 1]);
                         lstHasThreeConsec.Add(lstbtn[i + 2]);
 
+                        //need to handle case where transparent button is before and after. try first lower button. before or after?
                         b3 = (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ? lstbtn[i - 1] : lstbtn[i + 3];
 
                         Debug.Print("HasThreeConsecTiles in WinningList " + listIndex + " at index " + i.ToString() + " true"); // Include list index
