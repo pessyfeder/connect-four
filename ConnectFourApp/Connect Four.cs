@@ -46,7 +46,7 @@ namespace ConnectFourApp
 
             lstWinningSets = new()
             {
-                new() { button1, button2, button3, button4, button5, button6 }, 
+                new() { button1, button2, button3, button4, button5, button6 },
                 new() { button7, button8, button9, button10, button11, button12 },
                 new() { button13, button14, button15, button16, button17, button18 },
                 new() { button19, button20, button21, button22, button23, button24 },
@@ -138,20 +138,10 @@ namespace ConnectFourApp
         private void SetButtonBackColor(Button btn)
         {
             Color c = Color.Transparent;
-            if (gameStatus == GameStatusEnum.Playing) {
-                var b = IsLastTransparentButtonInAnyList(btn, lstBtnColumnLists);
-                //when a set of three is found this returns false
-                //which button is btn then?
-                if (b == true) 
-                {
-                    c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
-                }
-
-                else
-                {
-                    MessageBox.Show("cannot add tile");
-                    return;
-                }
+            if (gameStatus == GameStatusEnum.Playing)
+            {
+                c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
+                
                 btn.BackColor = c;
             }
         }
@@ -197,7 +187,7 @@ namespace ConnectFourApp
         }
 
         private bool IsWinner(List<Button> lstbtn)
-        {         
+        {
             for (int i = 0; i <= lstbtn.Count - 4; i++)
             {
                 if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
@@ -227,7 +217,7 @@ namespace ConnectFourApp
                 {
                     DetectTie();
                 }
-            }            
+            }
         }
 
         private void SwitchTurns()
@@ -291,21 +281,47 @@ namespace ConnectFourApp
                 if (HasThreeConsecTiles(lst, out Button b3, index)) // Pass the index to the function
                 {
                     Debug.Print("Found Three Consec true in WinningSet " + index);
-                    SetButtonBackColor(b3);
+
+                    bool b = IsLastTransparentButtonInAnyList(b3, lstBtnColumnLists);
+
+                    if (b == true)
+                    {
+                        SetButtonBackColor(b3);
+                    }
+                    else
+                    {
+                        MessageBox.Show("cannot add tile");
+                        return;
+                    }
+
                     DetectWinnerorTie();
+
                     foreach (var lstBtn in lstWinningSets)
                     {
                         if (!IsWinner(lstBtn))
                         {
                             SwitchTurns();
                         }
-                    }                    
+                    }
+
                     return;
                 }
                 else if (HasTwoConsecAndOneNone(lst, out Button b201))
                 {
                     Debug.Print("Found Two Consec and One Empty in WinningSet " + index);
-                    SetButtonBackColor(b201);
+
+                    bool b = IsLastTransparentButtonInAnyList(b201, lstBtnColumnLists);
+
+                    if (b == true)
+                    {
+                        SetButtonBackColor(b201);
+                    }
+                    else
+                    {
+                        MessageBox.Show("cannot add tile");
+                        return;
+                    }
+
                     DetectWinnerorTie();
                     foreach (var lstBtn in lstWinningSets)
                     {
@@ -313,7 +329,7 @@ namespace ConnectFourApp
                         {
                             SwitchTurns();
                         }
-                    }    
+                    }
                     return; // Exit after handling the case
                 }
             }
