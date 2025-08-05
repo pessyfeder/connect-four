@@ -284,8 +284,7 @@ namespace ConnectFourApp
                 {
                     if (IsComputerTurn())
                     {
-                        //eventually change to DoCompTurn()? 
-                        //Do I want it to go through the whole algorithm again?
+                        //eventually change to DoCompTurn()? Do I want it to go through the whole algorithm again?
                         DoComputerTurnRandom();
                     }
 
@@ -303,7 +302,9 @@ namespace ConnectFourApp
                     Debug.Print("Found Three Colored true in WinningSet " + index);
 
                     // Check if any transparent button is the last in its column list
-                    Button lastTransparentButton = lstTransparentButtons.FirstOrDefault(b => IsLastTransparentButtonInAnyList(b, lstBtnColumnLists));
+                    Button lastTransparentButton = 
+                        lstTransparentButtons.FirstOrDefault(b => 
+                        IsLastTransparentButtonInAnyList(b, lstBtnColumnLists));
 
                     if (lastTransparentButton != null)
                     {
@@ -321,7 +322,7 @@ namespace ConnectFourApp
                     else
                     {
                         // If there are no suitable transparent buttons
-                        MessageBox.Show("cannot add tile");
+                        Debug.Print("cannot add tile");
                         return;
                     }
                 }
@@ -375,8 +376,6 @@ namespace ConnectFourApp
 
         private void DoComputerTurnRandom()
         {
-            // picks a random list with available transparent button(s)
-            // and then calls DoTurn(), which sets "b" as the lowest transparent button in the list.
             Debug.Print("DoComputerTurnRandom");
             var randomList = lstBtnColumnLists[rnd.Next(0, lstBtnColumnLists.Count())].Where(b => b.BackColor == Color.Transparent).ToList();
             DoTurn(randomList);
