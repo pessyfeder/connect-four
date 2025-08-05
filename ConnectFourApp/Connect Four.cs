@@ -298,13 +298,16 @@ namespace ConnectFourApp
             for (int index = 0; index < lstWinningSets.Count; index++)
             {
                 var lst = lstWinningSets[index];
-                if (HasThreeColoredTiles(lst, out Button b3, index)) // Pass the index to the function
+                if (HasThreeColoredTiles(lst, out List<Button> lstTransparentButtons, index)) // Pass all transparent buttons
                 {
                     Debug.Print("Found Three Colored true in WinningSet " + index);
 
-                    if (IsLastTransparentButtonInAnyList(b3, lstBtnColumnLists))
+                    // Check if any transparent button is the last in its column list
+                    Button lastTransparentButton = lstTransparentButtons.FirstOrDefault(b => IsLastTransparentButtonInAnyList(b, lstBtnColumnLists));
+
+                    if (lastTransparentButton != null)
                     {
-                        SetButtonBackColor(b3); 
+                        SetButtonBackColor(lastTransparentButton);
                         DetectWinnerorTie();
                         foreach (var lstBtn in lstWinningSets)
                         {
@@ -317,10 +320,10 @@ namespace ConnectFourApp
                     }
                     else
                     {
-                        //check HasThreeColoredTiles() again to check for another possible set
+                        // If there are no suitable transparent buttons
                         MessageBox.Show("cannot add tile");
                         return;
-                    }                 
+                    }
                 }
                 else
                 {
@@ -328,9 +331,11 @@ namespace ConnectFourApp
                 }
             }
         }
-        private bool HasThreeColoredTiles(List<Button> lstbtn, out Button b3, int listIndex)
+        private bool HasThreeColoredTiles(List<Button> lstbtn, out List<Button> lstTransparentButtons, int listIndex)
         {
-            PrintList(lstbtn); 
+            PrintList(lstbtn);
+            lstTransparentButtons = new List<Button>(); // Initialize the list for transparent buttons
+
             if (lstbtn.Count >= 4)
             {
                 for (int i = 0; i <= lstbtn.Count - 4; i++)
@@ -344,19 +349,21 @@ namespace ConnectFourApp
                     Debug.Print($"t {numt}, red {numr}, blue {numb} in WinningList {listIndex} at index {i}");
 
                     bool hasThreeColoredAndOneTrans = (numr == 3 || numb == 3) && numt == 1;
-                    //need to handle "double trap" - if there's more than one list where hasThreeColoredAndOneTrans evaluates to true.
+
                     if (hasThreeColoredAndOneTrans)
                     {
-                        b3 = lstinloop.FirstOrDefault(b => b.BackColor == Color.Transparent);
-
-                        Debug.Print($"HasThreeConsecTiles in WinningList {listIndex} at index {i} true");
-                        return true;
-                    }                    
-                } 
+                        Button transparentButton = lstinloop.FirstOrDefault(b => b.BackColor == Color.Transparent);
+                        if (transparentButton != null)
+                        {
+                            lstTransparentButtons.Add(transparentButton); // Add to the list of transparent buttons
+                            Debug.Print($"HasThreeConsecTiles in WinningList {listIndex} at index {i} true");
+                        }
+                    }
+                }
             }
+
             Debug.Print("HasThreeColoredTiles false in WinningList " + listIndex); // Include list index
-            b3 = null;
-            return false;
+            return lstTransparentButtons.Count > 0; // Return true if we found any transparent buttons
         }
         private void PrintList(List<Button> lst)
         {
