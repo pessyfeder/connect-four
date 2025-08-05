@@ -341,7 +341,7 @@ namespace ConnectFourApp
         }
         private bool HasThreeColoredTiles(List<Button> lstbtn, out Button b3, int listIndex)
         {
-            PrintList(lstbtn);
+            PrintList(lstbtn); 
 
             if (lstbtn.Count >= 4)
             {
