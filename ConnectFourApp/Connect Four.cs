@@ -301,10 +301,9 @@ namespace ConnectFourApp
                 var lst = lstWinningSets[index];
                 if (HasThreeColoredTiles(lst, out Button b3, index)) // Pass the index to the function
                 {
-                    Debug.Print("Found Three Col true in WinningSet " + index);
+                    Debug.Print("Found Three Colored true in WinningSet " + index);
 
                     bool b = IsLastTransparentButtonInAnyList(b3, lstBtnColumnLists);
-
                     if (b == true)
                     {
                         SetButtonBackColor(b3);
@@ -326,11 +325,11 @@ namespace ConnectFourApp
                     }
                     return;
                 }
-            }
-            else
-            {
-                Debug.Print("DoComputerTurnOffenseDefense found nothing");
-
+                else
+                {
+                    Debug.Print("DoComputerTurnOffenseDefense found nothing");
+                    return;
+                }
             }
         }
 
@@ -369,7 +368,7 @@ namespace ConnectFourApp
                 }
             }
 
-            Debug.Print("HasThreeConsecTiles false in WinningList " + listIndex); // Include list index
+            Debug.Print("HasThreeColoredTiles false in WinningList " + listIndex); // Include list index
             b3 = null;
             return false;
         }
