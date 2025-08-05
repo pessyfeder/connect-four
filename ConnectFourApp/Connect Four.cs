@@ -157,7 +157,6 @@ namespace ConnectFourApp
                 if (b)
                 {
                     var transparentButtons = buttonList.Where(b => b.BackColor == Color.Transparent).ToList();
-
                     // Check if the target button is present and is the last transparent button
 
                     if (transparentButtons.Any() && transparentButtons.Last() == targetButton)
@@ -372,20 +371,15 @@ namespace ConnectFourApp
                     int numr = lstinloop.Count(b => b.BackColor == Color.Red);
                     int numb = lstinloop.Count(b => b.BackColor == Color.Blue);
 
-                    Debug.Print("t " + numt.ToString());
-                    Debug.Print("red " + numr.ToString());
-                    Debug.Print("blue " + numb.ToString());
+                    Debug.Print($"t {numt}, red {numr}, blue {numb} in WinningList {listIndex} at index {i}");
 
-                    bool hasThreeColoredAndOneTrans = (lstinloop.Count(b => b.BackColor == Color.Red) == 3)
-                    ||
-                    (lstinloop.Count(b => b.BackColor == Color.Blue) == 3 &&
-                    lstinloop.Count(b => b.BackColor == Color.Transparent) == 1);
+                    bool hasThreeColoredAndOneTrans = (numr == 3 || numb == 3) && numt == 1;
 
                     if (hasThreeColoredAndOneTrans)
                     {
-                        b3 = lstinloop.First(b => b.BackColor == Color.Transparent);
+                        b3 = lstinloop.FirstOrDefault(b => b.BackColor == Color.Transparent);
 
-                        Debug.Print("HasThreeConsecTiles in WinningList " + listIndex + " at index " + i.ToString() + " true"); // Include list index
+                        Debug.Print($"HasThreeConsecTiles in WinningList {listIndex} at index {i} true");
                         return true;
                     }                    
                 }
