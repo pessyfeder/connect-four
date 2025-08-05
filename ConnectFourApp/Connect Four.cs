@@ -383,7 +383,7 @@ namespace ConnectFourApp
 
                     if (hasThreeColoredAndOneTrans)
                     {
-                        Button b = lstinloop.First(b => b.BackColor == Color.Transparent);
+                        b3 = lstinloop.First(b => b.BackColor == Color.Transparent);
 
                         Debug.Print("HasThreeConsecTiles in WinningList " + listIndex + " at index " + i.ToString() + " true"); // Include list index
                         return true;
@@ -392,6 +392,7 @@ namespace ConnectFourApp
             }
 
             Debug.Print("HasThreeConsecTiles false in WinningList " + listIndex); // Include list index
+            b3 = null;
             return false;
         }
 
