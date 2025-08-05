@@ -141,7 +141,7 @@ namespace ConnectFourApp
             if (gameStatus == GameStatusEnum.Playing)
             {
                 c = currentTurn == TurnEnum.Red ? Color.Red : Color.Blue;
-                
+
                 btn.BackColor = c;
             }
         }
@@ -336,7 +336,7 @@ namespace ConnectFourApp
             Debug.Print("DoComputerTurnOffenseDefense found nothing");
         }
 
-        private bool HasThreeConsecTiles(List<Button> lstbtn, out Button b3, int listIndex) // Add listIndex parameter
+        private bool HasThreeConsecTiles(List<Button> lstbtn, out Button b3, int listIndex)
         {
             List<Button> lstHasThreeConsec = new();
             b3 = null;
@@ -356,13 +356,23 @@ namespace ConnectFourApp
                         lstHasThreeConsec.Add(lstbtn[i + 1]);
                         lstHasThreeConsec.Add(lstbtn[i + 2]);
 
-                        //need to handle case where transparent button is before and after. try first lower button. before or after?
-                        b3 = (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ? lstbtn[i - 1] : lstbtn[i + 3];
+                        Button beforeButton = (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ? lstbtn[i - 1] : null;
+                        Button afterButton = (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent) ? lstbtn[i + 3] : null;
+
+                        // Assign b3 based on available transparent buttons
+                        if (beforeButton != null && afterButton != null)
+                        {
+                            b3 = IsLastTransparentButtonInAnyList(beforeButton, lstBtnColumnLists) ? beforeButton : afterButton;
+                        }
+                        else 
+                        {
+                            b3 = beforeButton ?? afterButton;
+                        }            
 
                         Debug.Print("HasThreeConsecTiles in WinningList " + listIndex + " at index " + i.ToString() + " true"); // Include list index
                         return true;
                     }
-                }
+                }                
             }
             Debug.Print("HasThreeConsecTiles false in WinningList " + listIndex); // Include list index
             return false;
