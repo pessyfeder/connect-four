@@ -250,6 +250,21 @@ namespace ConnectFourApp
                         if (IsComputerTurn())
                         {
                             DisplayGameStatus();
+                            //DoComputerTurn()
+                            //this method calls: 
+                            //DoCompDefense - finds TWO-THREE consec RED tiles and blocks on either side
+                                //Do first
+                                //If yes, switch turns.
+                                //If still comp turn
+                            //DoCompOffense - finds blue tiles on board 
+                                //if there's three in row - complete
+                                //if there's two in row - add before / after 
+                                //if there's one - add before or after 
+                                    //if any of the conditions are satisfied - switch turns
+                            //DoCompRandom 
+                                //If no other conditions are met; Initial move
+                                //switch turns
+                            
 
                             await Task.Delay(1000);
                             DoComputerTurnOffenseDefense();
