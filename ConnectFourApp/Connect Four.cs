@@ -299,9 +299,9 @@ namespace ConnectFourApp
             for (int index = 0; index < lstWinningSets.Count; index++)
             {
                 var lst = lstWinningSets[index];
-                if (HasThreeConsecTiles(lst, out Button b3, index)) // Pass the index to the function
+                if (HasThreeColoredTiles(lst, out Button b3, index)) // Pass the index to the function
                 {
-                    Debug.Print("Found Three Consec true in WinningSet " + index);
+                    Debug.Print("Found Three Col true in WinningSet " + index);
 
                     bool b = IsLastTransparentButtonInAnyList(b3, lstBtnColumnLists);
 
@@ -324,37 +324,14 @@ namespace ConnectFourApp
                             SwitchTurns();
                         }
                     }
-
                     return;
                 }
-                else if (HasTwoConsecAndOneNone(lst, out Button b201))
-                {
-                    Debug.Print("Found Two Consec and One Empty in WinningSet " + index);
-
-                    bool b = IsLastTransparentButtonInAnyList(b201, lstBtnColumnLists);
-
-                    if (b == true)
-                    {
-                        SetButtonBackColor(b201);
-                    }
-                    else
-                    {
-                        MessageBox.Show("cannot add tile");
-                        return;
-                    }
-
-                    DetectWinnerorTie();
-                    foreach (var lstBtn in lstWinningSets)
-                    {
-                        if (!IsWinner(lstBtn))
-                        {
-                            SwitchTurns();
-                        }
-                    }
-                    return; // Exit after handling the case
-                }
             }
-            Debug.Print("DoComputerTurnOffenseDefense found nothing");
+            else
+            {
+                Debug.Print("DoComputerTurnOffenseDefense found nothing");
+
+            }
         }
 
         private void PrintList(List<Button> lst)
@@ -364,7 +341,7 @@ namespace ConnectFourApp
                 Debug.Print(b.Name + " " + b.BackColor.ToString());
             }
         }
-        private bool HasThreeConsecTiles(List<Button> lstbtn, out Button b3, int listIndex)
+        private bool HasThreeColoredTiles(List<Button> lstbtn, out Button b3, int listIndex)
         {
             PrintList(lstbtn);
 
@@ -396,49 +373,7 @@ namespace ConnectFourApp
             b3 = null;
             return false;
         }
-
-        private bool HasTwoConsecAndOneNone(List<Button> lstbtn, out Button b201)
-        {
-            List<Button> lstHasTwoConsecAndOneNone = new();
-            b201 = null;
-
-            if (lstbtn.Count >= 4)
-            {
-                for (int i = 0; i <= lstbtn.Count - 4; i++)
-                {
-                    if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
-                        &&
-                        lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
-                        lstbtn[i + 2].BackColor == Color.Transparent &&
-                        lstbtn[i].BackColor == lstbtn[i + 3].BackColor)
-                    {
-                        lstHasTwoConsecAndOneNone.Add(lstbtn[i]);
-                        lstHasTwoConsecAndOneNone.Add(lstbtn[i + 1]);
-                        lstHasTwoConsecAndOneNone.Add(lstbtn[i + 3]);
-
-                        b201 = lstbtn[i + 2];
-
-                        return true;
-                    }
-                    else if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
-                        &&
-                        lstbtn[i + 1].BackColor == Color.Transparent &&
-                        lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
-                        lstbtn[i + 3].BackColor == lstbtn[i].BackColor)
-                    {
-                        lstHasTwoConsecAndOneNone.Add(lstbtn[i]);
-                        lstHasTwoConsecAndOneNone.Add(lstbtn[i + 2]);
-                        lstHasTwoConsecAndOneNone.Add(lstbtn[i + 3]);
-
-                        b201 = lstbtn[i + 1];
-
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
+        
         private void DoComputerTurnRandom()
         {
             // picks a random list with available transparent button(s)
