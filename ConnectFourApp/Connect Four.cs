@@ -253,18 +253,18 @@ namespace ConnectFourApp
                             //DoComputerTurn()
                             //this method calls: 
                             //DoCompDefense - finds TWO-THREE consec RED tiles and blocks on either side
-                                //Do first
-                                //If yes, switch turns.
-                                //If still comp turn
+                            //Do first
+                            //If yes, switch turns.
+                            //If still comp turn
                             //DoCompOffense - finds blue tiles on board 
-                                //if there's three in row - complete
-                                //if there's two in row - add before / after 
-                                //if there's one - add before or after 
-                                    //if any of the conditions are satisfied - switch turns
+                            //if there's three in row - complete
+                            //if there's two in row - add before / after 
+                            //if there's one - add before or after 
+                            //if any of the conditions are satisfied - switch turns
                             //DoCompRandom 
-                                //If no other conditions are met; Initial move
-                                //switch turns
-                            
+                            //If no other conditions are met; Initial move
+                            //switch turns
+
 
                             await Task.Delay(1000);
                             DoComputerTurnOffenseDefense();
@@ -351,44 +351,46 @@ namespace ConnectFourApp
             Debug.Print("DoComputerTurnOffenseDefense found nothing");
         }
 
+        private void PrintList(List<Button> lst)
+        {
+            foreach (var b in lst)
+            {
+                Debug.Print(b.Name + " " + b.BackColor.ToString());
+            }
+        }
         private bool HasThreeConsecTiles(List<Button> lstbtn, out Button b3, int listIndex)
         {
-            List<Button> lstHasThreeConsec = new();
-            b3 = null;
+            PrintList(lstbtn);
 
             if (lstbtn.Count >= 4)
             {
                 for (int i = 0; i <= lstbtn.Count - 4; i++)
                 {
-                    if ((lstbtn[i].BackColor == Color.Red || lstbtn[i].BackColor == Color.Blue)
-                        &&
-                        lstbtn[i].BackColor == lstbtn[i + 1].BackColor &&
-                        lstbtn[i].BackColor == lstbtn[i + 2].BackColor &&
-                        ((i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ||
-                        (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent)))
+                    List<Button> lstinloop = new() { lstbtn[i], lstbtn[i + 1], lstbtn[i + 2], lstbtn[i + 3] };
+
+                    int numt = lstinloop.Count(b => b.BackColor == Color.Transparent);
+                    int numr = lstinloop.Count(b => b.BackColor == Color.Red);
+                    int numb = lstinloop.Count(b => b.BackColor == Color.Blue);
+
+                    Debug.Print("t " + numt.ToString());
+                    Debug.Print("red " + numr.ToString());
+                    Debug.Print("blue " + numb.ToString());
+
+                    bool hasThreeColoredAndOneTrans = (lstinloop.Count(b => b.BackColor == Color.Red) == 3)
+                    ||
+                    (lstinloop.Count(b => b.BackColor == Color.Blue) == 3 &&
+                    lstinloop.Count(b => b.BackColor == Color.Transparent) == 1);
+
+                    if (hasThreeColoredAndOneTrans)
                     {
-                        lstHasThreeConsec.Add(lstbtn[i]);
-                        lstHasThreeConsec.Add(lstbtn[i + 1]);
-                        lstHasThreeConsec.Add(lstbtn[i + 2]);
-
-                        Button beforeButton = (i - 1 >= 0 && lstbtn[i - 1].BackColor == Color.Transparent) ? lstbtn[i - 1] : null;
-                        Button afterButton = (i + 3 <= (lstbtn.Count - 1) && lstbtn[i + 3].BackColor == Color.Transparent) ? lstbtn[i + 3] : null;
-
-                        // Assign b3 based on available transparent buttons
-                        if (beforeButton != null && afterButton != null)
-                        {
-                            b3 = IsLastTransparentButtonInAnyList(beforeButton, lstBtnColumnLists) ? beforeButton : afterButton;
-                        }
-                        else 
-                        {
-                            b3 = beforeButton ?? afterButton;
-                        }            
+                        Button b = lstinloop.First(b => b.BackColor == Color.Transparent);
 
                         Debug.Print("HasThreeConsecTiles in WinningList " + listIndex + " at index " + i.ToString() + " true"); // Include list index
                         return true;
-                    }
-                }                
+                    }                    
+                }
             }
+
             Debug.Print("HasThreeConsecTiles false in WinningList " + listIndex); // Include list index
             return false;
         }
@@ -439,6 +441,7 @@ namespace ConnectFourApp
         {
             // picks a random list with available transparent button(s)
             // and then calls DoTurn(), which sets "b" as the lowest transparent button in the list.
+            Debug.Print("DoComputerTurnRandom");
             var randomList = lstBtnColumnLists[rnd.Next(0, lstBtnColumnLists.Count())].Where(b => b.BackColor == Color.Transparent).ToList();
             DoTurn(randomList);
         }
