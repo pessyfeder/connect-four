@@ -266,7 +266,7 @@ namespace ConnectFourApp
 
 
                             await Task.Delay(1000);
-                            DoComputerTurnOffenseDefense();
+                            CompBlockOrCompleteThree();
 
                             if (IsComputerTurn())
                             {
@@ -294,7 +294,7 @@ namespace ConnectFourApp
             }
         }
 
-        private void DoComputerTurnOffenseDefense()
+        private void CompBlockOrCompleteThree()
         {
             for (int index = 0; index < lstWinningSets.Count; index++)
             {
