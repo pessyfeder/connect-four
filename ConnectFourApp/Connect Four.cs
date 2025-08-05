@@ -282,6 +282,13 @@ namespace ConnectFourApp
 
                 else
                 {
+                    if (IsComputerTurn())
+                    {
+                        //eventually change to DoCompTurn()? 
+                        //Do I want it to go through the whole algorithm again?
+                        DoComputerTurnRandom();
+                    }
+
                     MessageBox.Show("Slot is unavailable. Please select another slot.");
                 }
             }
