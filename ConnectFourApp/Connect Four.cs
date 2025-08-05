@@ -365,7 +365,7 @@ namespace ConnectFourApp
                         Debug.Print($"HasThreeConsecTiles in WinningList {listIndex} at index {i} true");
                         return true;
                     }                    
-                }
+                } 
             }
 
             Debug.Print("HasThreeColoredTiles false in WinningList " + listIndex); // Include list index
