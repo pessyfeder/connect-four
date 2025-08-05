@@ -328,7 +328,6 @@ namespace ConnectFourApp
                 else
                 {
                     Debug.Print("DoComputerTurnOffenseDefense found nothing");
-                    return;
                 }
             }
         }
