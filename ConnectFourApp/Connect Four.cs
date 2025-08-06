@@ -229,6 +229,34 @@ namespace ConnectFourApp
             return lstbtn.Any(btn => btn.BackColor == Color.Transparent);
         }
 
+        private void DoComputerTurn()
+        {            
+            CompBlockOrCompleteThree();
+
+            if (IsComputerTurn())
+            {
+                DoComputerTurnRandom();
+            }
+
+            DetectWinnerorTie();
+            //this method calls: 
+            //DoCompOffense - finds blue tiles on board 
+            //if there's three in row - complete
+            //if there's two in row - add before / after (each winningSet)
+            //if there's one - add before or after (each winningSet)
+            //if any of the conditions are satisfied -
+            //detect winner
+            //switch turns
+            //DoCompDefense - same as Offense but for RED tiles
+            //three in a row - block
+            //two in a row - block 
+            //one - ignore (don't add logic for this)
+            //if any move is made, switch turns
+            //DoCompRandom 
+            //If no move has been made; Initial move
+            //switch turns
+        }
+
         private async Task DoTurn(List<Button> lstbtn)
         {
             if (gameStatus == GameStatusEnum.Playing)
@@ -249,31 +277,9 @@ namespace ConnectFourApp
                         if (IsComputerTurn())
                         {
                             DisplayGameStatus();
-                            //DoComputerTurn()
-                            //this method calls: 
-                            //DoCompDefense - finds TWO-THREE consec RED tiles and blocks on either side
-                            //Do first
-                            //If yes, switch turns.
-                            //If still comp turn
-                            //DoCompOffense - finds blue tiles on board 
-                            //if there's three in row - complete
-                            //if there's two in row - add before / after 
-                            //if there's one - add before or after 
-                            //if any of the conditions are satisfied - switch turns
-                            //DoCompRandom 
-                            //If no other conditions are met; Initial move
-                            //switch turns
-
 
                             await Task.Delay(1000);
-                            CompBlockOrCompleteThree();
-
-                            if (IsComputerTurn())
-                            {
-                                DoComputerTurnRandom();
-                            }
-
-                            DetectWinnerorTie();
+                            DoComputerTurn();                       
                         }
                     }
 
